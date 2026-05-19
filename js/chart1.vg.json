@@ -1,0 +1,298 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Coffee drink preferences by age group — parallel flow chart.",
+  "width": 760,
+  "height": 480,
+  "padding": {"left": 20, "right": 20, "top": 80, "bottom": 45},
+  "background": "#FBF5E8",
+  "autosize": "pad",
+
+  "title": {
+    "text": "Coffee Drink Preferences by Age Group",
+    "subtitle": "Left: Age group · Right: Drink type · Line thickness = response count",
+    "anchor": "middle",
+    "font": "Georgia",
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "color": "#2A1D14",
+    "subtitleColor": "#9C8A76",
+    "subtitleFontSize": 12,
+    "offset": 20
+  },
+
+  "signals": [
+    {
+      "name": "hover",
+      "value": null,
+      "on": [
+        {"events": "path:mouseover", "update": "datum"},
+        {"events": "path:mouseout",  "update": "null"}
+      ]
+    }
+  ],
+
+  "data": [
+    {
+      "name": "flows",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_drink_bump_v2.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"count": "number", "rank": "number"}
+      }
+    },
+    {
+      "name": "age_nodes",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["age_group"],
+          "fields": ["count"],
+          "ops": ["sum"],
+          "as": ["total_count"]
+        }
+      ]
+    },
+    {
+      "name": "drink_nodes",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["drink"],
+          "fields": ["count"],
+          "ops": ["sum"],
+          "as": ["total_count"]
+        }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "ageScale",
+      "type": "point",
+      "domain": [
+        "<18 years old",
+        "18-24 years old",
+        "25-34 years old",
+        "35-44 years old",
+        "45-54 years old",
+        "55-64 years old",
+        ">65 years old"
+      ],
+      "range": [40, 440],
+      "padding": 0.5
+    },
+    {
+      "name": "drinkScale",
+      "type": "point",
+      "domain": [
+        "Flat White",
+        "Latte",
+        "Cappuccino",
+        "Iced Coffee"
+      ],
+      "range": [80, 400],
+      "padding": 0.5
+    },
+    {
+      "name": "colourScale",
+      "type": "ordinal",
+      "domain": ["Flat White", "Latte", "Cappuccino", "Iced Coffee"],
+      "range": ["#C8873F", "#E8A84A", "#6A4732", "#3E5D7A"]
+    },
+    {
+      "name": "widthScale",
+      "type": "sqrt",
+      "domain": {"data": "flows", "field": "count"},
+      "range": [2, 18]
+    },
+    {
+      "name": "nodeSizeScale",
+      "type": "sqrt",
+      "domain": {"data": "flows", "field": "count"},
+      "range": [80, 600]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {"value": 175},
+          "y": {"value": 18},
+          "text": {"value": "AGE GROUP"},
+          "align": {"value": "right"},
+          "font": {"value": "Georgia"},
+          "fontSize": {"value": 11},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "#9C8A76"},
+          "letterSpacing": {"value": 2}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {"value": 590},
+          "y": {"value": 18},
+          "text": {"value": "COFFEE DRINK"},
+          "align": {"value": "left"},
+          "font": {"value": "Georgia"},
+          "fontSize": {"value": 11},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "#9C8A76"},
+          "letterSpacing": {"value": 2}
+        }
+      }
+    },
+
+    {
+      "type": "rule",
+      "encode": {
+        "enter": {
+          "x": {"value": 195},
+          "x2": {"value": 580},
+          "y": {"value": 26},
+          "stroke": {"value": "#E8D9BD"},
+          "strokeWidth": {"value": 0.5}
+        }
+      }
+    },
+
+    {
+      "type": "path",
+      "from": {"data": "flows"},
+      "encode": {
+        "enter": {
+          "fill": {"value": null},
+          "stroke": {"scale": "colourScale", "field": "drink"},
+          "strokeCap": {"value": "round"},
+          "cursor": {"value": "pointer"},
+          "tooltip": {
+            "signal": "{'Age Group': datum.age_group, 'Drink': datum.drink, 'Responses': datum.count, 'Rank in age group': datum.rank}"
+          }
+        },
+        "update": {
+          "path": {
+            "signal": "'M 195,' + scale('ageScale', datum.age_group) + ' C 350,' + scale('ageScale', datum.age_group) + ' 440,' + scale('drinkScale', datum.drink) + ' 580,' + scale('drinkScale', datum.drink)"
+          },
+          "strokeWidth": {
+            "signal": "scale('widthScale', datum.count)"
+          },
+          "strokeOpacity": {
+            "signal": "hover === null ? 0.65 : (hover.drink === datum.drink || hover.age_group === datum.age_group) ? 0.9 : 0.08"
+          }
+        }
+      }
+    },
+
+    {
+      "type": "symbol",
+      "from": {"data": "age_nodes"},
+      "encode": {
+        "enter": {
+          "x": {"value": 195},
+          "y": {"scale": "ageScale", "field": "age_group"},
+          "size": {"value": 64},
+          "fill": {"value": "#6A4732"},
+          "stroke": {"value": "#FBF5E8"},
+          "strokeWidth": {"value": 2.5}
+        }
+      }
+    },
+
+    {
+      "type": "symbol",
+      "from": {"data": "drink_nodes"},
+      "encode": {
+        "enter": {
+          "x": {"value": 580},
+          "y": {"scale": "drinkScale", "field": "drink"},
+          "size": {"value": 64},
+          "fill": {"scale": "colourScale", "field": "drink"},
+          "stroke": {"value": "#FBF5E8"},
+          "strokeWidth": {"value": 2.5}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": {"data": "age_nodes"},
+      "encode": {
+        "enter": {
+          "x": {"value": 178},
+          "y": {"scale": "ageScale", "field": "age_group"},
+          "dy": {"value": 1},
+          "text": {"field": "age_group"},
+          "align": {"value": "right"},
+          "baseline": {"value": "middle"},
+          "font": {"value": "Georgia"},
+          "fontSize": {"value": 13},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "#2A1D14"}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": {"data": "drink_nodes"},
+      "encode": {
+        "enter": {
+          "x": {"value": 598},
+          "y": {"scale": "drinkScale", "field": "drink"},
+          "dy": {"value": 1},
+          "text": {"field": "drink"},
+          "align": {"value": "left"},
+          "baseline": {"value": "middle"},
+          "font": {"value": "Georgia"},
+          "fontSize": {"value": 13},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "#2A1D14"}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": {"data": "drink_nodes"},
+      "encode": {
+        "enter": {
+          "x": {"value": 598},
+          "y": {"scale": "drinkScale", "field": "drink"},
+          "dy": {"value": 18},
+          "text": {
+            "signal": "datum.drink === 'Flat White' ? '← #1 in Australia' : ''"
+          },
+          "align": {"value": "left"},
+          "baseline": {"value": "middle"},
+          "font": {"value": "Georgia"},
+          "fontStyle": {"value": "italic"},
+          "fontSize": {"value": 10.5},
+          "fill": {"value": "#C8873F"}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {"value": 30},
+          "y": {"value": 475},
+          "text": {"value": "Source: GACTT Coffee Survey 2024 · Hover a line to highlight"},
+          "align": {"value": "left"},
+          "font": {"value": "Georgia"},
+          "fontStyle": {"value": "italic"},
+          "fontSize": {"value": 10},
+          "fill": {"value": "#9C8A76"}
+        }
+      }
+    }
+  ]
+}

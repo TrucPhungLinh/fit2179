@@ -1,0 +1,172 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#1C0F07",
+  "width": 620,
+  "height": 520,
+  "title": {
+    "text": "GLOBAL COFFEE CONSUMPTION",
+    "subtitle": "Bubble size = total volume (million 60kg bags) · Hover to explore · Click to highlight",
+    "fontSize": 20,
+    "subtitleFontSize": 11,
+    "color": "#F5DEB3",
+    "subtitleColor": "#C4956A",
+    "anchor": "middle",
+    "fontWeight": "bold",
+    "offset": 16
+  },
+  "config": {
+    "view": {"stroke": null},
+    "font": "Georgia",
+    "axis": {
+      "labelColor": "#C4956A",
+      "titleColor": "#C4956A",
+      "gridColor": "#2E1A0A",
+      "domainColor": "#5C3317",
+      "tickColor": "#5C3317",
+      "labelFontSize": 11
+    },
+    "legend": {
+      "labelColor": "#F5DEB3",
+      "titleColor": "#C4956A",
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "fillColor": "#1C0F07",
+      "strokeColor": "#5C3317",
+      "padding": 8,
+      "cornerRadius": 4
+    }
+  },
+  "params": [
+    {
+      "name": "sort_by",
+      "value": "kg_per_capita",
+      "bind": {
+        "input": "select",
+        "options": ["kg_per_capita", "total_bags_million", "yoy_growth_pct"],
+        "labels": ["Per Capita (kg/person)", "Total Volume (million bags)", "YoY Growth (%)"],
+        "name": "Sort by: "
+      }
+    },
+    {
+      "name": "region_select",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": ["All", "Europe", "Oceania", "N. America", "S. America", "Asia"],
+        "name": "Region: "
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/world_coffee_consumption.csv",
+    "format": {"type": "csv", "parse": {
+      "kg_per_capita": "number",
+      "total_bags_million": "number",
+      "cups_per_day": "number",
+      "yoy_growth_pct": "number",
+      "rank_per_capita": "number"
+    }}
+  },
+  "transform": [
+    {"filter": "region_select === 'All' || datum.region === region_select"},
+    {
+      "calculate": "sort_by === 'kg_per_capita' ? datum.kg_per_capita : sort_by === 'total_bags_million' ? datum.total_bags_million : datum.yoy_growth_pct",
+      "as": "sort_value"
+    }
+  ],
+  "layer": [
+    {
+      "params": [
+        {"name": "clicked", "select": {"type": "point", "on": "click"}}
+      ],
+      "mark": {"type": "circle", "cursor": "pointer"},
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "sort_value", "order": "descending"},
+          "title": null,
+          "axis": {
+            "labelFontSize": 12,
+            "labelColor": "#F5DEB3",
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "sort_value",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "grid": true,
+            "gridColor": "#2E1A0A",
+            "labelColor": "#C4956A",
+            "domain": false,
+            "ticks": false
+          }
+        },
+        "size": {
+          "field": "total_bags_million",
+          "type": "quantitative",
+          "title": "Total Volume (M bags)",
+          "scale": {"range": [40, 2500]},
+          "legend": {"orient": "bottom-right"}
+        },
+        "color": {
+          "field": "region",
+          "type": "nominal",
+          "title": "Region",
+          "scale": {
+            "domain": ["Europe","Oceania","N. America","S. America","Asia"],
+            "range": ["#C8873F","#F5DEB3","#A0522D","#8B6914","#D4A76A"]
+          },
+          "legend": {"orient": "bottom", "columns": 5}
+        },
+        "stroke": {
+          "condition": {"test": "datum.country === 'Australia'", "value": "#FFFFFF"},
+          "value": "transparent"
+        },
+        "strokeWidth": {
+          "condition": {"test": "datum.country === 'Australia'", "value": 2.5},
+          "value": 0
+        },
+        "opacity": {
+          "condition": {"param": "clicked", "empty": true, "value": 1},
+          "value": 0.2
+        },
+        "tooltip": [
+          {"field": "country", "type": "nominal", "title": "Country"},
+          {"field": "region", "type": "nominal", "title": "Region"},
+          {"field": "kg_per_capita", "type": "quantitative", "title": "kg/person/year", "format": ".1f"},
+          {"field": "total_bags_million", "type": "quantitative", "title": "Total (M bags)", "format": ".2f"},
+          {"field": "cups_per_day", "type": "quantitative", "title": "Cups/day/person", "format": ".2f"},
+          {"field": "yoy_growth_pct", "type": "quantitative", "title": "YoY Growth (%)", "format": "+.1f"},
+          {"field": "rank_per_capita", "type": "quantitative", "title": "Global Rank"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.country === 'Australia'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 14,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "font": "Georgia",
+        "color": "#F5DEB3"
+      },
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "sort_value", "order": "descending"}
+        },
+        "x": {"field": "sort_value", "type": "quantitative"},
+        "text": {"value": "← Australia"}
+      }
+    }
+  ]
+}

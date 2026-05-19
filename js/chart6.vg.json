@@ -1,0 +1,245 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#FBF5E8",
+  "width": 680,
+  "height": 340,
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Georgia",
+    "axis": {
+      "labelColor": "#6B5A4A",
+      "titleColor": "#3B2415",
+      "gridColor": "#E8DECE",
+      "domainColor": "#C4A882",
+      "tickColor": "#C4A882",
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    },
+    "legend": {
+      "labelColor": "#3B2415",
+      "titleColor": "#3B2415",
+      "labelFontSize": 12,
+      "symbolSize": 120,
+      "rowPadding": 4
+    }
+  },
+  "title": {
+    "text": "Imports over time, by origin (kilotonnes)",
+    "subtitle": "Layered from largest origin at the centre outward.",
+    "anchor": "start",
+    "fontSize": 17,
+    "subtitleFontSize": 12,
+    "color": "#2A1D14",
+    "subtitleColor": "#7A5132",
+    "subtitleFont": "Georgia",
+    "subtitleFontStyle": "italic",
+    "offset": 12
+  },
+  "params": [
+    {
+      "name": "year_highlight",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 2015,
+        "max": 2024,
+        "step": 1,
+        "name": "Year: "
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_imports_trend.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "kilotonnes": "number"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "opacity": 0.88
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "labelAngle": 0,
+            "values": [
+              2015,
+              2017,
+              2019,
+              2021,
+              2023,
+              2024
+            ],
+            "grid": false,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "y": {
+          "field": "kilotonnes",
+          "type": "quantitative",
+          "title": null,
+          "stack": "zero",
+          "axis": {
+            "tickCount": 4,
+            "grid": true,
+            "domain": false,
+            "ticks": false,
+            "labelExpr": "datum.value + ' kt'"
+          }
+        },
+        "color": {
+          "field": "country",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Brazil",
+            "Vietnam",
+            "Colombia",
+            "Ethiopia",
+            "Indonesia"
+          ],
+          "scale": {
+            "domain": [
+              "Brazil",
+              "Vietnam",
+              "Colombia",
+              "Ethiopia",
+              "Indonesia"
+            ],
+            "range": [
+              "#7B5230",
+              "#4A6B8A",
+              "#C87858",
+              "#C8A840",
+              "#88A878"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "columns": 5,
+            "symbolType": "square",
+            "symbolSize": 130
+          }
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Origin"
+          },
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "kilotonnes",
+            "type": "quantitative",
+            "title": "Volume (kt)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === year_highlight"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "strokeWidth": 1.5,
+        "color": "#6B3A2A",
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === year_highlight"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "kilotonnes",
+              "as": "total"
+            }
+          ],
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -8,
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#6B3A2A",
+        "font": "Georgia"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "total",
+          "type": "quantitative",
+          "stack": "zero"
+        },
+        "text": {
+          "field": "total",
+          "format": ".0f",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "x": 95,
+        "y": 38,
+        "align": "left",
+        "fontSize": 12,
+        "fontStyle": "italic",
+        "font": "Georgia",
+        "color": "#4A2C1A",
+        "text": "+66% over a decade \u2192"
+      }
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#1C0F07",
+  "width": 580,
+  "height": 560,
+  "title": {
+    "text": "COFFEE PRICES AROUND THE WORLD",
+    "subtitle": "Price in USD · ☕ = Australian cities · Flat White is #1 favourite in Australia · Hover to explore",
+    "fontSize": 19,
+    "subtitleFontSize": 11,
+    "color": "#F5DEB3",
+    "subtitleColor": "#C4956A",
+    "anchor": "middle",
+    "fontWeight": "bold",
+    "offset": 16
+  },
+  "config": {
+    "view": {"stroke": null},
+    "font": "Georgia",
+    "legend": {
+      "labelColor": "#F5DEB3",
+      "titleColor": "#C4956A",
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "fillColor": "#1C0F07",
+      "strokeColor": "#5C3317",
+      "padding": 8,
+      "cornerRadius": 4
+    }
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_price_by_city.csv",
+    "format": {"type": "csv", "parse": {
+      "cappuccino_usd": "number",
+      "latte_usd": "number",
+      "espresso_usd": "number",
+      "affordability_pct_monthly_wage": "number",
+      "rank_expensive": "number"
+    }}
+  },
+  "params": [
+    {
+      "name": "region_hl",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": ["All", "Australia", "Europe", "N. America", "Asia"],
+        "name": "Highlight region: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "datum.country === 'Australia' ? '☕ ' + datum.city : datum.city",
+      "as": "city_label"
+    },
+    {
+      "calculate": "datum.country === 'Australia' ? 'Australia' : datum.region",
+      "as": "display_region"
+    },
+    {
+      "fold": ["espresso_usd", "cappuccino_usd", "latte_usd"],
+      "as": ["drink_type", "price"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "strokeWidth": 1.2},
+      "encoding": {
+        "y": {
+          "field": "city_label",
+          "type": "nominal",
+          "sort": {"field": "cappuccino_usd", "order": "descending"},
+          "title": null,
+          "axis": {
+            "labelFontSize": 11,
+            "labelColor": "#F5DEB3",
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "price",
+          "type": "quantitative",
+          "title": "Price (USD)",
+          "axis": {
+            "format": "$,.2f",
+            "labelColor": "#C4956A",
+            "gridColor": "#2E1A0A",
+            "domain": false,
+            "ticks": false
+          }
+        },
+        "color": {
+          "field": "display_region",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Australia","Europe","N. America","Asia"],
+            "range": ["#F5DEB3","#C8873F","#A0522D","#D4A76A"]
+          }
+        },
+        "opacity": {
+          "condition": {
+            "test": "region_hl !== 'All' && datum.display_region !== region_hl",
+            "value": 0.07
+          },
+          "value": 0.45
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hover_city",
+          "select": {"type": "point", "on": "mouseover", "clear": "mouseout"}
+        }
+      ],
+      "mark": {"type": "point", "filled": true, "size": 75, "cursor": "pointer"},
+      "encoding": {
+        "y": {
+          "field": "city_label",
+          "type": "nominal",
+          "sort": {"field": "cappuccino_usd", "order": "descending"}
+        },
+        "x": {"field": "price", "type": "quantitative"},
+        "color": {
+          "field": "drink_type",
+          "type": "nominal",
+          "title": "Drink Type",
+          "scale": {
+            "domain": ["espresso_usd","cappuccino_usd","latte_usd"],
+            "range": ["#8B4513","#D4A76A","#F5DEB3"]
+          },
+          "legend": {
+            "labelExpr": "datum.label === 'espresso_usd' ? 'Espresso' : datum.label === 'cappuccino_usd' ? 'Cappuccino' : 'Latte'",
+            "orient": "bottom",
+            "columns": 3
+          }
+        },
+        "stroke": {
+          "condition": {"test": "datum.country === 'Australia'", "value": "#FFFFFF"},
+          "value": "transparent"
+        },
+        "strokeWidth": {
+          "condition": {"test": "datum.country === 'Australia'", "value": 1.5},
+          "value": 0
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "region_hl !== 'All' && datum.display_region !== region_hl",
+              "value": 0.07
+            },
+            {
+              "param": "hover_city",
+              "empty": true,
+              "value": 1
+            }
+          ],
+          "value": 0.3
+        },
+        "size": {
+          "condition": {"param": "hover_city", "empty": false, "value": 160},
+          "value": 75
+        },
+        "tooltip": [
+          {"field": "city", "type": "nominal", "title": "City"},
+          {"field": "country", "type": "nominal", "title": "Country"},
+          {"field": "cappuccino_usd", "type": "quantitative", "title": "Cappuccino (USD)", "format": "$,.2f"},
+          {"field": "latte_usd", "type": "quantitative", "title": "Latte (USD)", "format": "$,.2f"},
+          {"field": "espresso_usd", "type": "quantitative", "title": "Espresso (USD)", "format": "$,.2f"},
+          {"field": "most_popular_drink", "type": "nominal", "title": "Most Popular Locally"},
+          {"field": "affordability_pct_monthly_wage", "type": "quantitative", "title": "% of monthly wage", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.city === 'Melbourne' && datum.drink_type === 'cappuccino_usd'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "dy": -14,
+        "fontSize": 10,
+        "fontStyle": "italic",
+        "color": "#F5DEB3",
+        "font": "Georgia"
+      },
+      "encoding": {
+        "y": {
+          "field": "city_label",
+          "type": "nominal",
+          "sort": {"field": "cappuccino_usd", "order": "descending"}
+        },
+        "x": {"field": "price", "type": "quantitative"},
+        "text": {"value": "🏆 Flat White capital of the world"}
+      }
+    }
+  ]
+}
