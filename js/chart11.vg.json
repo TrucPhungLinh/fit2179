@@ -1,0 +1,329 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#FBF5E8",
+  "width": 700,
+  "height": 430,
+  "padding": {
+    "left": 24,
+    "right": 72,
+    "top": 24,
+    "bottom": 30
+  },
+  "title": {
+    "text": "Top 10 Most Expensive Coffees by Retail Price",
+    "subtitle": "Prices shown in AUD per kilogram",
+    "anchor": "start",
+    "font": "Georgia",
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "subtitleFontSize": 16,
+    "color": "#24150D",
+    "subtitleColor": "#5A3B25",
+    "subtitleFont": "Georgia",
+    "subtitleFontStyle": "normal",
+    "offset": 12
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Georgia",
+    "axis": {
+      "labelColor": "#3A2417",
+      "titleColor": "#2A1A10",
+      "gridColor": "#D8C8B5",
+      "domainColor": "#B99A74",
+      "tickColor": "#B99A74",
+      "gridDash": [
+        4,
+        3
+      ],
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelFontWeight": "normal",
+      "titleFontWeight": "bold"
+    },
+    "legend": {
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    }
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/premium_coffee.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "rank": "number",
+        "price_aud": "number",
+        "au_favourite": "boolean"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "'#' + datum.rank + '  ' + datum.name + (datum.au_favourite ? '  \u2605' : '')",
+      "as": "full_label"
+    },
+    {
+      "calculate": "'$' + format(datum.price_aud, ',d')",
+      "as": "price_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 5,
+        "height": 20
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "rank",
+            "op": "min",
+            "order": "ascending"
+          },
+          "title": null,
+          "axis": {
+            "labels": false,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "price_aud",
+          "type": "quantitative",
+          "title": "Retail price (AUD per kg)",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              4500
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              1000,
+              2000,
+              3000,
+              4000
+            ],
+            "labelExpr": "'$' + format(datum.value, ',d')",
+            "grid": true,
+            "domain": false,
+            "ticks": false,
+            "labelFontSize": 13,
+            "titleFontSize": 14,
+            "labelColor": "#3A2417",
+            "titleColor": "#2A1A10"
+          }
+        },
+        "color": {
+          "field": "badge",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "rare",
+              "process",
+              "experience",
+              "luxury"
+            ],
+            "range": [
+              "#B85C48",
+              "#7B5A42",
+              "#C49335",
+              "#9A4E3B"
+            ]
+          },
+          "legend": null
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.au_favourite",
+            "value": 1
+          },
+          "value": 0.9
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "type": "nominal",
+            "title": "Coffee"
+          },
+          {
+            "field": "origin",
+            "type": "nominal",
+            "title": "Origin"
+          },
+          {
+            "field": "price_aud",
+            "type": "quantitative",
+            "title": "Price (AUD/kg)",
+            "format": "$,d"
+          },
+          {
+            "field": "badge",
+            "type": "nominal",
+            "title": "Category"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 75,
+        "strokeWidth": 2,
+        "stroke": "#FBF5E8"
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "rank",
+            "op": "min",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "field": "price_aud",
+          "type": "quantitative",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              4500
+            ],
+            "nice": false
+          }
+        },
+        "color": {
+          "field": "badge",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "rare",
+              "process",
+              "experience",
+              "luxury"
+            ],
+            "range": [
+              "#8F321F",
+              "#4F3728",
+              "#8B681A",
+              "#7F3B2C"
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "font": "Georgia"
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "rank",
+            "op": "min",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "field": "price_aud",
+          "type": "quantitative",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              4500
+            ],
+            "nice": false
+          }
+        },
+        "text": {
+          "field": "price_label",
+          "type": "nominal"
+        },
+        "color": {
+          "value": "#2A1A10"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -10,
+        "fontSize": 13.5,
+        "fontWeight": "bold",
+        "font": "Georgia",
+        "color": "#24150D"
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "rank",
+            "op": "min",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "value": 0
+        },
+        "text": {
+          "field": "full_label",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -10,
+        "dy": 14,
+        "fontSize": 11.5,
+        "fontStyle": "normal",
+        "font": "Georgia",
+        "color": "#6A4428"
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "sort": {
+            "field": "rank",
+            "op": "min",
+            "order": "ascending"
+          }
+        },
+        "x": {
+          "value": 0
+        },
+        "text": {
+          "field": "origin",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

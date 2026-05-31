@@ -1,0 +1,803 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 1000,
+  "height": 720,
+  "padding": 20,
+  "background": "#F7EFE4",
+  "signals": [
+    {
+      "name": "activeTab",
+      "value": "imports",
+      "on": [
+        {
+          "events": {
+            "type": "click",
+            "markname": "tab_imports"
+          },
+          "update": "'imports'"
+        },
+        {
+          "events": {
+            "type": "click",
+            "markname": "tab_imports_label"
+          },
+          "update": "'imports'"
+        },
+        {
+          "events": {
+            "type": "click",
+            "markname": "tab_exports"
+          },
+          "update": "'exports'"
+        },
+        {
+          "events": {
+            "type": "click",
+            "markname": "tab_exports_label"
+          },
+          "update": "'exports'"
+        }
+      ]
+    },
+    {
+      "name": "cx",
+      "value": 400
+    },
+    {
+      "name": "cy",
+      "value": 460
+    }
+  ],
+  "data": [
+    {
+      "name": "imports_raw",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_australia_imports_tonnes.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "tonnes_2024": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.country !== 'Other'"
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": "tonnes_2024",
+            "order": "descending"
+          }
+        },
+        {
+          "type": "window",
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "rank"
+          ]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.rank <= 10"
+        },
+        {
+          "type": "formula",
+          "as": "value",
+          "expr": "datum.tonnes_2024"
+        },
+        {
+          "type": "formula",
+          "as": "displayValue",
+          "expr": "format(datum.tonnes_2024, ',') + ' tonnes'"
+        },
+        {
+          "type": "formula",
+          "as": "tab",
+          "expr": "'imports'"
+        }
+      ]
+    },
+    {
+      "name": "exports_raw",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_global_exports_tonnes.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "tonnes_2024": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "collect",
+          "sort": {
+            "field": "tonnes_2024",
+            "order": "descending"
+          }
+        },
+        {
+          "type": "window",
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "rank"
+          ]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.rank <= 10"
+        },
+        {
+          "type": "formula",
+          "as": "value",
+          "expr": "datum.tonnes_2024"
+        },
+        {
+          "type": "formula",
+          "as": "displayValue",
+          "expr": "format(datum.tonnes_2024, ',') + ' tonnes'"
+        },
+        {
+          "type": "formula",
+          "as": "tab",
+          "expr": "'exports'"
+        }
+      ]
+    },
+    {
+      "name": "active_data",
+      "source": [
+        "imports_raw",
+        "exports_raw"
+      ],
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.tab === activeTab"
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          }
+        },
+        {
+          "type": "window",
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "rank"
+          ]
+        },
+        {
+          "type": "joinaggregate",
+          "ops": [
+            "max"
+          ],
+          "fields": [
+            "value"
+          ],
+          "as": [
+            "maxVal"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "arcInner",
+          "expr": "170 - (datum.rank - 1) * 13 - 5"
+        },
+        {
+          "type": "formula",
+          "as": "arcOuter",
+          "expr": "170 - (datum.rank - 1) * 13 + 5"
+        },
+        {
+          "type": "formula",
+          "as": "arcEndAngle",
+          "expr": "-PI/2 + (datum.value / datum.maxVal) * PI * 1.48"
+        },
+        {
+          "type": "formula",
+          "as": "listY",
+          "expr": "250 + (datum.rank - 1) * 28"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 40
+          },
+          "y": {
+            "value": 22
+          },
+          "width": {
+            "value": 920
+          },
+          "height": {
+            "value": 688
+          },
+          "cornerRadius": {
+            "value": 28
+          },
+          "fill": {
+            "value": "#FFF8EF"
+          },
+          "stroke": {
+            "value": "#E6D2BA"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 400
+          },
+          "y": {
+            "value": 58
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 24
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#4B2A17"
+          },
+          "text": {
+            "value": "Coffee Trade: Australia Imports vs Global Exports"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 400
+          },
+          "y": {
+            "value": 86
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 16
+          },
+          "fill": {
+            "value": "#000000"
+          },
+          "text": {
+            "value": "All values are standardised to tonnes, click a tab to switch view"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "name": "tab_imports",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 240
+          },
+          "y": {
+            "value": 115
+          },
+          "width": {
+            "value": 145
+          },
+          "height": {
+            "value": 36
+          },
+          "cornerRadius": {
+            "value": 18
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "fill": {
+            "signal": "activeTab === 'imports' ? '#6B3F1E' : '#E2CDB2'"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "tab_imports_label",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 312.5
+          },
+          "y": {
+            "value": 133
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "text": {
+            "value": "AU Imports"
+          },
+          "fill": {
+            "signal": "activeTab === 'imports' ? '#FFFFFF' : '#6B3F1E'"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "name": "tab_exports",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 402
+          },
+          "y": {
+            "value": 115
+          },
+          "width": {
+            "value": 158
+          },
+          "height": {
+            "value": 36
+          },
+          "cornerRadius": {
+            "value": 18
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "fill": {
+            "signal": "activeTab === 'exports' ? '#6B3F1E' : '#E2CDB2'"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "tab_exports_label",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 481
+          },
+          "y": {
+            "value": 133
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "text": {
+            "value": "Global Exports"
+          },
+          "fill": {
+            "signal": "activeTab === 'exports' ? '#FFFFFF' : '#6B3F1E'"
+          }
+        }
+      }
+    },
+    {
+      "type": "arc",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "startAngle": {
+            "value": -3.14
+          },
+          "endAngle": {
+            "value": 3.14
+          },
+          "innerRadius": {
+            "value": 220
+          },
+          "outerRadius": {
+            "value": 252
+          },
+          "fill": {
+            "value": "#D8C2A8"
+          }
+        }
+      }
+    },
+    {
+      "type": "arc",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "startAngle": {
+            "value": -3.14
+          },
+          "endAngle": {
+            "value": 3.14
+          },
+          "innerRadius": {
+            "value": 190
+          },
+          "outerRadius": {
+            "value": 220
+          },
+          "fill": {
+            "value": "#F1E0CC"
+          }
+        }
+      }
+    },
+    {
+      "type": "arc",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "startAngle": {
+            "value": -3.14
+          },
+          "endAngle": {
+            "value": 3.14
+          },
+          "innerRadius": {
+            "value": 0
+          },
+          "outerRadius": {
+            "value": 185
+          },
+          "fill": {
+            "value": "#6E4128"
+          }
+        }
+      }
+    },
+    {
+      "type": "arc",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "startAngle": {
+            "value": -3.14
+          },
+          "endAngle": {
+            "value": 3.14
+          },
+          "innerRadius": {
+            "value": 181
+          },
+          "outerRadius": {
+            "value": 185
+          },
+          "fill": {
+            "value": "#FFF8EF"
+          },
+          "opacity": {
+            "value": 0.9
+          }
+        }
+      }
+    },
+    {
+      "type": "arc",
+      "name": "arcs",
+      "from": {
+        "data": "active_data"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "innerRadius": {
+            "field": "arcInner"
+          },
+          "outerRadius": {
+            "field": "arcOuter"
+          },
+          "startAngle": {
+            "value": -1.5708
+          },
+          "endAngle": {
+            "field": "arcEndAngle"
+          },
+          "fill": {
+            "value": "#FFF8EF"
+          },
+          "opacity": {
+            "value": 0.96
+          },
+          "stroke": {
+            "value": "#6E4128"
+          },
+          "strokeWidth": {
+            "value": 0.5
+          },
+          "cornerRadius": {
+            "value": 5
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "tooltip": {
+            "signal": "{'Rank': datum.rank, 'Country': datum.country, 'Value': datum.displayValue, 'Region': datum.region}"
+          }
+        },
+        "hover": {
+          "fill": {
+            "value": "#F2C98C"
+          },
+          "opacity": {
+            "value": 1
+          },
+          "stroke": {
+            "value": "#F2C98C"
+          },
+          "strokeWidth": {
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "value": 180
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "bottom"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 20
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#4B2A17"
+          },
+          "text": {
+            "value": "Top 10 Countries"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "value": 208
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "bottom"
+          },
+          "fontSize": {
+            "value": 13
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#9A6846"
+          },
+          "text": {
+            "signal": "activeTab === 'imports' ? 'Australia Imports (tonnes)' : 'Global Exports (tonnes)'"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 700
+          },
+          "y": {
+            "value": 178
+          },
+          "width": {
+            "value": 235
+          },
+          "height": {
+            "value": 442
+          },
+          "cornerRadius": {
+            "value": 18
+          },
+          "fill": {
+            "value": "#F6E7D4"
+          },
+          "stroke": {
+            "value": "#D8C2A8"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 722
+          },
+          "y": {
+            "value": 214
+          },
+          "align": {
+            "value": "left"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 17
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#4B2A17"
+          },
+          "text": {
+            "value": "Ranking"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {
+            "value": 722
+          },
+          "y": {
+            "value": 242
+          },
+          "align": {
+            "value": "left"
+          },
+          "fontSize": {
+            "value": 14
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#4B2A17"
+          },
+          "text": {
+            "value": "Top 10 countries"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "active_data"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "value": 722
+          },
+          "y": {
+            "field": "listY"
+          },
+          "text": {
+            "signal": "datum.rank + '. ' + datum.country"
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 11.5
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#4B2A17"
+          }
+        }
+      }
+    }
+  ]
+}

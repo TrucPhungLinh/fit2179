@@ -1,0 +1,200 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#F7EFE5",
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Arial",
+    "axis": {
+      "labelColor": "#4A2C1A",
+      "titleColor": "#4A2C1A",
+      "gridColor": "#E3D2C1",
+      "domainColor": "#8B5E3C",
+      "tickColor": "#8B5E3C",
+      "labelFontSize": 13,
+      "titleFontSize": 14
+    },
+    "legend": {
+      "labelColor": "#4A2C1A",
+      "titleColor": "#4A2C1A",
+      "orient": "bottom",
+      "labelFontSize": 13,
+      "titleFontSize": 14
+    },
+    "title": {
+      "color": "#3B2415",
+      "fontSize": 24,
+      "fontWeight": "bold",
+      "anchor": "start",
+      "subtitleColor": "#6B4A35",
+      "subtitleFontSize": 13
+    }
+  },
+  "width": 400,
+  "height": 470,
+  "title": {
+    "text": "Difference from National Average"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/australia_flat_white_price_by_state.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.average_flat_white_price_aud - datum.national_average_aud",
+      "as": "difference_from_average"
+    },
+    {
+      "calculate": "datum.difference_from_average >= 0 ? 'Above national average' : 'Below national average'",
+      "as": "average_category"
+    },
+    {
+      "calculate": "datum.difference_from_average >= 0 ? '+$' + format(datum.difference_from_average, '.2f') : '-$' + format(abs(datum.difference_from_average), '.2f')",
+      "as": "difference_label"
+    },
+    {
+      "calculate": "'$' + format(datum.average_flat_white_price_aud, '.2f')",
+      "as": "price_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#5B3924",
+        "strokeWidth": 1.5,
+        "strokeDash": [
+          4,
+          4
+        ]
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "bar_hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "state_or_territory"
+            ],
+            "on": "mouseover",
+            "clear": "mouseout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 7
+      },
+      "encoding": {
+        "y": {
+          "field": "state_or_territory",
+          "type": "nominal",
+          "sort": {
+            "field": "difference_from_average",
+            "order": "descending"
+          },
+          "title": null,
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8
+          }
+        },
+        "x": {
+          "field": "difference_from_average",
+          "type": "quantitative",
+          "title": "Difference from national average price",
+          "axis": {
+            "format": "+$.2f",
+            "titlePadding": 12
+          }
+        },
+        "color": {
+          "field": "average_category",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Above national average",
+              "Below national average"
+            ],
+            "range": [
+              "#7B3F1D",
+              "#D8B894"
+            ]
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "bar_hover",
+            "value": 1
+          },
+          "value": 0.78
+        },
+        "tooltip": [
+          {
+            "field": "state_or_territory",
+            "type": "nominal",
+            "title": "State / Territory"
+          },
+          {
+            "field": "price_label",
+            "type": "nominal",
+            "title": "Average flat white price"
+          },
+          {
+            "field": "difference_label",
+            "type": "nominal",
+            "title": "Compared with national average"
+          },
+          {
+            "field": "cafes_priced",
+            "type": "quantitative",
+            "title": "Cafes priced",
+            "format": ","
+          },
+          {
+            "field": "rank_most_expensive",
+            "type": "ordinal",
+            "title": "Price rank"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 6,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#3B2415"
+      },
+      "encoding": {
+        "y": {
+          "field": "state_or_territory",
+          "type": "nominal",
+          "sort": {
+            "field": "difference_from_average",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "difference_from_average",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "difference_label"
+        }
+      }
+    }
+  ]
+}

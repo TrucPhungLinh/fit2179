@@ -1,0 +1,196 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#F7EFE5",
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Arial",
+    "axis": {
+      "labelColor": "#4A2C1A",
+      "titleColor": "#4A2C1A",
+      "gridColor": "#E3D2C1",
+      "domainColor": "#8B5E3C",
+      "tickColor": "#8B5E3C",
+      "labelFontSize": 13,
+      "titleFontSize": 14
+    },
+    "legend": {
+      "labelColor": "#4A2C1A",
+      "titleColor": "#4A2C1A",
+      "orient": "bottom",
+      "labelFontSize": 13,
+      "titleFontSize": 14
+    },
+    "title": {
+      "color": "#3B2415",
+      "fontSize": 24,
+      "fontWeight": "bold",
+      "anchor": "start",
+      "subtitleColor": "#6B4A35",
+      "subtitleFontSize": 13
+    }
+  },
+  "width": 430,
+  "height": 470,
+  "projection": {
+    "type": "mercator"
+  },
+  "title": {
+    "text": "Average Flat White Price by State",
+    "subtitle": "Darker colour equals higher average price"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "params": [
+        {
+          "name": "map_hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "state_or_territory"
+            ],
+            "on": "mouseover",
+            "clear": "mouseout"
+          }
+        }
+      ],
+      "transform": [
+        {
+          "calculate": "datum.properties.STATE_NAME",
+          "as": "state_or_territory"
+        },
+        {
+          "lookup": "state_or_territory",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/australia_flat_white_price_by_state.csv"
+            },
+            "key": "state_or_territory",
+            "fields": [
+              "average_flat_white_price_aud",
+              "cafes_priced",
+              "rank_most_expensive",
+              "national_average_aud"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.average_flat_white_price_aud - datum.national_average_aud",
+          "as": "difference_from_average"
+        },
+        {
+          "calculate": "'$' + format(datum.average_flat_white_price_aud, '.2f')",
+          "as": "price_label"
+        },
+        {
+          "calculate": "datum.difference_from_average >= 0 ? '+$' + format(datum.difference_from_average, '.2f') : '-$' + format(abs(datum.difference_from_average), '.2f')",
+          "as": "difference_label"
+        },
+        {
+          "calculate": "datum.difference_from_average >= 0 ? 'Above national average' : 'Below national average'",
+          "as": "average_category"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#F7EFE5",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "color": {
+          "field": "average_flat_white_price_aud",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "yelloworangered"
+          },
+          "legend": {
+            "format": "$.2f",
+            "title": "Avg. price"
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "map_hover",
+            "value": 1
+          },
+          "value": 0.82
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "map_hover",
+            "value": 3
+          },
+          "value": 1.2
+        },
+        "tooltip": [
+          {
+            "field": "state_or_territory",
+            "type": "nominal",
+            "title": "State / Territory"
+          },
+          {
+            "field": "price_label",
+            "type": "nominal",
+            "title": "Average flat white price"
+          },
+          {
+            "field": "difference_label",
+            "type": "nominal",
+            "title": "Compared with national average"
+          },
+          {
+            "field": "cafes_priced",
+            "type": "quantitative",
+            "title": "Cafes priced",
+            "format": ","
+          },
+          {
+            "field": "rank_most_expensive",
+            "type": "ordinal",
+            "title": "Price rank"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "longitude": 134,
+            "latitude": -25,
+            "label": "\u2615"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 48,
+        "opacity": 0.2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "color": {
+          "value": "#3B2415"
+        }
+      }
+    }
+  ]
+}

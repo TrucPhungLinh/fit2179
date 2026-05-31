@@ -1,0 +1,791 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 840,
+  "height": 680,
+  "padding": {
+    "left": 45,
+    "right": 80,
+    "top": 70,
+    "bottom": 60
+  },
+  "background": "#FBF5E8",
+  "title": {
+    "text": "Perceived Coffee Benefits vs Scientific Evidence",
+    "anchor": "start",
+    "font": "Georgia",
+    "fontSize": 24,
+    "subtitleFont": "Georgia",
+    "subtitleFontSize": 13,
+    "color": "#2F1B12",
+    "subtitleColor": "#6A4428",
+    "offset": 18
+  },
+  "signals": [
+    {
+      "name": "selectedGap",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": [
+          "All",
+          "Aligned",
+          "Perception-led",
+          "Under-recognised",
+          "Slightly under-recognised",
+          "Overestimated"
+        ],
+        "name": "Filter gap type: "
+      }
+    },
+    {
+      "name": "hoverClaim",
+      "value": null,
+      "on": [
+        {
+          "events": "@claimNode:mouseover",
+          "update": "datum.claim_id"
+        },
+        {
+          "events": "@claimNode:mouseout",
+          "update": "null"
+        },
+        {
+          "events": "@claimLabel:mouseover",
+          "update": "datum.claim_id"
+        },
+        {
+          "events": "@claimLabel:mouseout",
+          "update": "null"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "claims",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_evidence_perception_claim_network.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "evidence_score": "number",
+          "perception_score": "number",
+          "gap_score": "number",
+          "claim_x": "number",
+          "claim_y": "number",
+          "evidence_x": "number",
+          "evidence_y": "number",
+          "perception_x": "number",
+          "perception_y": "number",
+          "edge_strength": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "selectedGap == 'All' || datum.gap_type == selectedGap"
+        },
+        {
+          "type": "formula",
+          "as": "evidencePath",
+          "expr": "'M' + datum.evidence_x + ',' + datum.evidence_y + ' C 255,' + datum.evidence_y + ' 280,' + datum.claim_y + ' ' + (datum.claim_x - 92) + ',' + datum.claim_y"
+        },
+        {
+          "type": "formula",
+          "as": "perceptionPath",
+          "expr": "'M' + (datum.claim_x + 92) + ',' + datum.claim_y + ' C 565,' + datum.claim_y + ' 595,' + datum.perception_y + ' ' + datum.perception_x + ',' + datum.perception_y"
+        }
+      ]
+    },
+    {
+      "name": "evidenceNodes",
+      "values": [
+        {
+          "line1": "Strong",
+          "line2": "evidence",
+          "x": 140,
+          "y": 150,
+          "score": "4\u20135"
+        },
+        {
+          "line1": "Moderate",
+          "line2": "evidence",
+          "x": 140,
+          "y": 300,
+          "score": "3\u20133.9"
+        },
+        {
+          "line1": "Cultural /",
+          "line2": "indirect",
+          "x": 140,
+          "y": 450,
+          "score": "2"
+        },
+        {
+          "line1": "Weak",
+          "line2": "evidence",
+          "x": 140,
+          "y": 540,
+          "score": "1\u20131.9"
+        }
+      ]
+    },
+    {
+      "name": "perceptionNodes",
+      "values": [
+        {
+          "line1": "High",
+          "line2": "perception",
+          "x": 700,
+          "y": 180,
+          "score": "4\u20135"
+        },
+        {
+          "line1": "Medium",
+          "line2": "perception",
+          "x": 700,
+          "y": 360,
+          "score": "2.5\u20133.9"
+        },
+        {
+          "line1": "Low",
+          "line2": "perception",
+          "x": 700,
+          "y": 500,
+          "score": "1\u20132.4"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "gapColor",
+      "type": "ordinal",
+      "domain": [
+        "Aligned",
+        "Perception-led",
+        "Under-recognised",
+        "Slightly under-recognised",
+        "Overestimated"
+      ],
+      "range": [
+        "#3D7A35",
+        "#B25430",
+        "#387C79",
+        "#3E5D7A",
+        "#7A2820"
+      ]
+    },
+    {
+      "name": "linkWidth",
+      "type": "linear",
+      "domain": [
+        0,
+        3
+      ],
+      "range": [
+        2.1,
+        6.2
+      ]
+    }
+  ],
+  "legends": [
+    {
+      "fill": "gapColor",
+      "orient": "bottom",
+      "title": "Evidence\u2013perception gap type",
+      "labelFont": "Georgia",
+      "titleFont": "Georgia",
+      "labelColor": "#2F1B12",
+      "titleColor": "#2F1B12",
+      "symbolType": "circle",
+      "direction": "horizontal",
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "symbolSize": 170,
+      "symbolLimit": 0,
+      "titleLimit": 320,
+      "labelLimit": 220,
+      "padding": 8,
+      "offset": 12,
+      "columnPadding": 18
+    }
+  ],
+  "marks": [
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 140
+          },
+          "y": {
+            "value": 72
+          },
+          "text": {
+            "value": "Scientific evidence"
+          },
+          "align": {
+            "value": "center"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 420
+          },
+          "y": {
+            "value": 72
+          },
+          "text": {
+            "value": "Coffee benefit claim"
+          },
+          "align": {
+            "value": "center"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 700
+          },
+          "y": {
+            "value": 72
+          },
+          "text": {
+            "value": "Public perception"
+          },
+          "align": {
+            "value": "center"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "path",
+      "from": {
+        "data": "claims"
+      },
+      "encode": {
+        "enter": {
+          "path": {
+            "field": "evidencePath"
+          },
+          "stroke": {
+            "scale": "gapColor",
+            "field": "gap_type"
+          },
+          "strokeWidth": {
+            "scale": "linkWidth",
+            "field": "edge_strength"
+          },
+          "strokeOpacity": {
+            "value": 0.5
+          },
+          "fill": {
+            "value": null
+          }
+        },
+        "update": {
+          "strokeOpacity": {
+            "signal": "hoverClaim == null || hoverClaim == datum.claim_id ? 0.62 : 0.14"
+          },
+          "tooltip": {
+            "signal": "{'Claim': datum.claim, 'Evidence level': datum.evidence_level, 'Evidence score': datum.evidence_score + ' / 5', 'Summary': datum.summary}"
+          }
+        }
+      }
+    },
+    {
+      "type": "path",
+      "from": {
+        "data": "claims"
+      },
+      "encode": {
+        "enter": {
+          "path": {
+            "field": "perceptionPath"
+          },
+          "stroke": {
+            "scale": "gapColor",
+            "field": "gap_type"
+          },
+          "strokeWidth": {
+            "scale": "linkWidth",
+            "field": "edge_strength"
+          },
+          "strokeOpacity": {
+            "value": 0.5
+          },
+          "fill": {
+            "value": null
+          }
+        },
+        "update": {
+          "strokeOpacity": {
+            "signal": "hoverClaim == null || hoverClaim == datum.claim_id ? 0.62 : 0.14"
+          },
+          "tooltip": {
+            "signal": "{'Claim': datum.claim, 'Perception level': datum.perception_level, 'Perception score': datum.perception_score + ' / 5', 'Gap type': datum.gap_type}"
+          }
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {
+        "data": "evidenceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "size": {
+            "value": 5200
+          },
+          "shape": {
+            "value": "circle"
+          },
+          "fill": {
+            "value": "#F2E6D1"
+          },
+          "stroke": {
+            "value": "#6F4320"
+          },
+          "strokeWidth": {
+            "value": 1.8
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "evidenceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y - 10"
+          },
+          "text": {
+            "field": "line1"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 11.5
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "evidenceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y + 4"
+          },
+          "text": {
+            "field": "line2"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 11.5
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "evidenceNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y + 23"
+          },
+          "text": {
+            "field": "score"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 10.5
+          },
+          "fill": {
+            "value": "#6A4428"
+          }
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {
+        "data": "perceptionNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "size": {
+            "value": 5200
+          },
+          "shape": {
+            "value": "circle"
+          },
+          "fill": {
+            "value": "#F2E6D1"
+          },
+          "stroke": {
+            "value": "#6F4320"
+          },
+          "strokeWidth": {
+            "value": 1.8
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "perceptionNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y - 10"
+          },
+          "text": {
+            "field": "line1"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 11.5
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "perceptionNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y + 4"
+          },
+          "text": {
+            "field": "line2"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 11.5
+          },
+          "fill": {
+            "value": "#2F1B12"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "perceptionNodes"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "signal": "datum.y + 23"
+          },
+          "text": {
+            "field": "score"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 10.5
+          },
+          "fill": {
+            "value": "#6A4428"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "name": "claimNode",
+      "from": {
+        "data": "claims"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "datum.claim_x - 92"
+          },
+          "x2": {
+            "signal": "datum.claim_x + 92"
+          },
+          "y": {
+            "signal": "datum.claim_y - 18"
+          },
+          "y2": {
+            "signal": "datum.claim_y + 18"
+          },
+          "cornerRadius": {
+            "value": 14
+          },
+          "fill": {
+            "scale": "gapColor",
+            "field": "gap_type"
+          },
+          "fillOpacity": {
+            "value": 0.92
+          },
+          "stroke": {
+            "value": "#2F1B12"
+          },
+          "strokeWidth": {
+            "value": 0.95
+          }
+        },
+        "update": {
+          "fillOpacity": {
+            "signal": "hoverClaim == null || hoverClaim == datum.claim_id ? 0.95 : 0.3"
+          },
+          "tooltip": {
+            "signal": "{'Claim': datum.claim, 'Evidence score': datum.evidence_score + ' / 5', 'Perception score': datum.perception_score + ' / 5', 'Gap type': datum.gap_type, 'Interpretation': datum.summary}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "claimLabel",
+      "from": {
+        "data": "claims"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "claim_x"
+          },
+          "y": {
+            "field": "claim_y"
+          },
+          "text": {
+            "field": "short_label"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fontSize": {
+            "value": 14
+          },
+          "fill": {
+            "value": "#FFFDF8"
+          }
+        },
+        "update": {
+          "opacity": {
+            "signal": "hoverClaim == null || hoverClaim == datum.claim_id ? 1 : 0.45"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 420
+          },
+          "y": {
+            "value": 645
+          },
+          "text": {
+            "value": "Scores from 1\u20135 are interpretive codings based on cited evidence and perception sources. They are for visual comparison only, not medical advice."
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontStyle": {
+            "value": "italic"
+          },
+          "fill": {
+            "value": "#000000"
+          },
+          "align": {
+            "value": "center"
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "axis": {
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    },
+    "legend": {
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    }
+  }
+}

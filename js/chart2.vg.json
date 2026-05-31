@@ -1,0 +1,557 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 620,
+  "height": 660,
+  "padding": 15,
+  "background": "#FBF5E8",
+  "title": {
+    "text": "Coffee Taste Profile by Age Group",
+    "anchor": "start",
+    "fontSize": 26,
+    "color": "#3b2416",
+    "offset": 16,
+    "font": "Georgia"
+  },
+  "signals": [
+    {
+      "name": "selectedAge",
+      "value": "18-24 years old",
+      "bind": {
+        "input": "select",
+        "options": [
+          "<18 years old",
+          "18-24 years old",
+          "25-34 years old",
+          "35-44 years old",
+          "45-54 years old",
+          "55-64 years old",
+          ">65 years old"
+        ],
+        "name": "Select age group: "
+      }
+    },
+    {
+      "name": "cx",
+      "value": 310
+    },
+    {
+      "name": "cy",
+      "value": 310
+    },
+    {
+      "name": "R",
+      "value": 240
+    },
+    {
+      "name": "maxScore",
+      "value": 5
+    },
+    {
+      "name": "N",
+      "value": 5
+    }
+  ],
+  "data": [
+    {
+      "name": "profile",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/radar_profile_v3.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "dimension_order": "number",
+          "score": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.age_group == selectedAge"
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": "dimension_order",
+            "order": "ascending"
+          }
+        },
+        {
+          "type": "formula",
+          "as": "angle",
+          "expr": "2 * PI * datum.dimension_order / N - PI / 2"
+        },
+        {
+          "type": "formula",
+          "as": "r",
+          "expr": "R * datum.score / maxScore"
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "cx + datum.r * cos(datum.angle)"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "cy + datum.r * sin(datum.angle)"
+        }
+      ]
+    },
+    {
+      "name": "axisPoints",
+      "values": [
+        {
+          "dimension": "Bitter",
+          "i": 0
+        },
+        {
+          "dimension": "Strong",
+          "i": 1
+        },
+        {
+          "dimension": "Sweet",
+          "i": 2
+        },
+        {
+          "dimension": "Taste Enjoyment",
+          "i": 3
+        },
+        {
+          "dimension": "Coffee Expertise",
+          "i": 4
+        }
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "as": "angle",
+          "expr": "2 * PI * datum.i / N - PI / 2"
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "cx + R * cos(datum.angle)"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "cy + R * sin(datum.angle)"
+        },
+        {
+          "type": "formula",
+          "as": "labelX",
+          "expr": "cx + (R + 58) * cos(datum.angle)"
+        },
+        {
+          "type": "formula",
+          "as": "labelY",
+          "expr": "cy + (R + 58) * sin(datum.angle)"
+        }
+      ]
+    },
+    {
+      "name": "ringLevels",
+      "values": [
+        {
+          "v": 1
+        },
+        {
+          "v": 2
+        },
+        {
+          "v": 3
+        },
+        {
+          "v": 4
+        },
+        {
+          "v": 5
+        }
+      ]
+    },
+    {
+      "name": "spiderWeb",
+      "values": [
+        {
+          "v": 1,
+          "i": 0
+        },
+        {
+          "v": 1,
+          "i": 1
+        },
+        {
+          "v": 1,
+          "i": 2
+        },
+        {
+          "v": 1,
+          "i": 3
+        },
+        {
+          "v": 1,
+          "i": 4
+        },
+        {
+          "v": 1,
+          "i": 0
+        },
+        {
+          "v": 2,
+          "i": 0
+        },
+        {
+          "v": 2,
+          "i": 1
+        },
+        {
+          "v": 2,
+          "i": 2
+        },
+        {
+          "v": 2,
+          "i": 3
+        },
+        {
+          "v": 2,
+          "i": 4
+        },
+        {
+          "v": 2,
+          "i": 0
+        },
+        {
+          "v": 3,
+          "i": 0
+        },
+        {
+          "v": 3,
+          "i": 1
+        },
+        {
+          "v": 3,
+          "i": 2
+        },
+        {
+          "v": 3,
+          "i": 3
+        },
+        {
+          "v": 3,
+          "i": 4
+        },
+        {
+          "v": 3,
+          "i": 0
+        },
+        {
+          "v": 4,
+          "i": 0
+        },
+        {
+          "v": 4,
+          "i": 1
+        },
+        {
+          "v": 4,
+          "i": 2
+        },
+        {
+          "v": 4,
+          "i": 3
+        },
+        {
+          "v": 4,
+          "i": 4
+        },
+        {
+          "v": 4,
+          "i": 0
+        },
+        {
+          "v": 5,
+          "i": 0
+        },
+        {
+          "v": 5,
+          "i": 1
+        },
+        {
+          "v": 5,
+          "i": 2
+        },
+        {
+          "v": 5,
+          "i": 3
+        },
+        {
+          "v": 5,
+          "i": 4
+        },
+        {
+          "v": 5,
+          "i": 0
+        }
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "as": "angle",
+          "expr": "2 * PI * datum.i / N - PI / 2"
+        },
+        {
+          "type": "formula",
+          "as": "radius",
+          "expr": "R * datum.v / maxScore"
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "cx + datum.radius * cos(datum.angle)"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "cy + datum.radius * sin(datum.angle)"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "webFacet",
+          "data": "spiderWeb",
+          "groupby": "v"
+        }
+      },
+      "marks": [
+        {
+          "type": "line",
+          "from": {
+            "data": "webFacet"
+          },
+          "encode": {
+            "enter": {
+              "x": {
+                "field": "x"
+              },
+              "y": {
+                "field": "y"
+              },
+              "stroke": {
+                "value": "#d6b48c"
+              },
+              "strokeWidth": {
+                "value": 1
+              },
+              "opacity": {
+                "value": 0.8
+              },
+              "interpolate": {
+                "value": "linear"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "rule",
+      "from": {
+        "data": "axisPoints"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "cx"
+          },
+          "y": {
+            "signal": "cy"
+          },
+          "x2": {
+            "field": "x"
+          },
+          "y2": {
+            "field": "y"
+          },
+          "stroke": {
+            "value": "#b98a5b"
+          },
+          "strokeWidth": {
+            "value": 1.1
+          },
+          "opacity": {
+            "value": 0.85
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "ringLevels"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "cx + 8"
+          },
+          "y": {
+            "signal": "cy - R * datum.v / maxScore"
+          },
+          "text": {
+            "field": "v"
+          },
+          "fontSize": {
+            "value": 11
+          },
+          "fill": {
+            "value": "#8a5a33"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "font": {
+            "value": "Georgia"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "axisPoints"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "labelX"
+          },
+          "y": {
+            "field": "labelY"
+          },
+          "text": {
+            "field": "dimension"
+          },
+          "fontSize": {
+            "value": 13
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fill": {
+            "value": "#3b2416"
+          },
+          "align": {
+            "signal": "datum.labelX > cx + 10 ? 'left' : datum.labelX < cx - 10 ? 'right' : 'center'"
+          },
+          "baseline": {
+            "signal": "datum.labelY > cy + 10 ? 'top' : datum.labelY < cy - 10 ? 'bottom' : 'middle'"
+          }
+        }
+      }
+    },
+    {
+      "type": "line",
+      "from": {
+        "data": "profile"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "fill": {
+            "value": "#c06c2f"
+          },
+          "fillOpacity": {
+            "value": 0.25
+          },
+          "stroke": {
+            "value": "#4b2412"
+          },
+          "strokeWidth": {
+            "value": 2.8
+          },
+          "interpolate": {
+            "value": "linear-closed"
+          }
+        },
+        "update": {
+          "tooltip": {
+            "signal": "{'Selected age group': selectedAge}"
+          }
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {
+        "data": "profile"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "size": {
+            "value": 90
+          },
+          "fill": {
+            "value": "#4b2412"
+          },
+          "stroke": {
+            "value": "#FBF5E8"
+          },
+          "strokeWidth": {
+            "value": 1.6
+          }
+        },
+        "update": {
+          "tooltip": {
+            "signal": "{'Age Group': datum.age_group, 'Dimension': datum.dimension, 'Score': format(datum.score, '.2f') + ' / 5'}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 35
+          },
+          "y": {
+            "value": 650
+          },
+          "text": {
+            "value": "Note: Categories were converted to a 1 to 5 scale so different coffee preference dimensions can be compared."
+          },
+          "fontSize": {
+            "value": 16
+          },
+          "fill": {
+            "value": "#3B2416"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontStyle": {
+            "value": "italic"
+          }
+        }
+      }
+    }
+  ]
+}

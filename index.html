@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee in Australia: More Than a Flat White.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,800;1,9..144,400;1,9..144,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main>
+    <div class="container">
+      <header>
+        <section class="hero" aria-label="Introduction">
+
+          <div class="hero-meta">
+            <div class="brand">
+              <div class="brand-mark">☕</div>
+              <div>
+                <div class="brand-name font-display">FIT 2179</div>
+                <div class="label-tag">Data Visualisation 2</div>
+              </div>
+            </div>
+            <div class="hero-issue label-tag">
+              <span>31st</span>&ensp;·&ensp;<span>May</span>&ensp;·&ensp;<span>2026</span>
+            </div>
+          </div>
+
+          <div class="hero-body">
+            <div>
+              <h1 class="hero-title">
+                Coffee in
+                <em>Australia</em><span class="muted">:</span><br>
+                <span class="hero-subtitle">From Daily Ritual<br>To Global Trade</span>
+              </h1>
+              <p class="hero-intro">
+                From the first sip to the final bill, this visual story explores how coffee became
+                part of Australia's everyday rhythm.
+              </p>
+              <div class="icon-row" role="list" aria-label="Coffee journey stops">
+                <div class="icon-item" role="listitem">
+                  <div class="icon-circle"><img src="images/sun.png" alt="Sun Icon"></div>
+                  <div class="icon-label">Morning ritual</div>
+                </div>
+                <div class="icon-item" role="listitem">
+                  <div class="icon-circle"><img src="images/cafe.png" alt="Cafe Stop Icon"></div>
+                  <div class="icon-label">Cafe stop</div>
+                </div>
+                <div class="icon-item" role="listitem">
+                  <div class="icon-circle"><img src="images/coffee.png" alt="Coffee Cup Icon"></div>
+                  <div class="icon-label">Takeaway cup</div>
+                </div>
+                <div class="icon-item" role="listitem">
+                  <div class="icon-circle"><img src="images/coffee-beans.png" alt="Coffee Beans Icon"></div>
+                  <div class="icon-label">Bean origin</div>
+                </div>
+                <div class="icon-item" role="listitem">
+                  <div class="icon-circle"><img src="images/group.png" alt="Group of People Icon"></div>
+                  <div class="icon-label">Social pause</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-cup-card paper-grid" aria-label="Key statistic: 1.91kg of coffee per Australian per year">
+              <div class="hero-cup-fig-label label-tag">Figure 01 · Hot coffee</div>
+              <div class="cup-illo" aria-hidden="true">☕</div>
+              <div class="hero-cup-stat">
+                <div>
+                  <div class="hero-big-num font-display">1.91<span class="hero-big-unit">kg</span></div>
+                  <div class="hero-per-caption label-tag">of coffee consumed per person each year</div>
+                </div>
+                <div class="hero-approx serif-note">≈ 1,000 short blacks' worth of coffee</div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="story-guide" aria-label="Story guide: eight sections">
+            <div class="story-guide-label">
+              <div class="label-tag">Story Guide</div>
+              <div class="font-display serif-note" style="font-size:15px;margin-top:4px;color:var(--ink-soft)">Eight stops, one cup.</div>
+            </div>
+            <ol class="story-guide-stops">
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--coral)"></span>
+                <div class="label-tag guide-stop-label">01</div>
+                <div class="guide-stop-name font-display">Taste</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--caramel)"></span>
+                <div class="label-tag guide-stop-label">02</div>
+                <div class="guide-stop-name font-display">Benefits</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--sage)"></span>
+                <div class="label-tag guide-stop-label">03</div>
+                <div class="guide-stop-name font-display">Trade</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--blue-ink)"></span>
+                <div class="label-tag guide-stop-label">04</div>
+                <div class="guide-stop-name font-display">Price</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--gold)"></span>
+                <div class="label-tag guide-stop-label">05</div>
+                <div class="guide-stop-name font-display">Places</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--teal)"></span>
+                <div class="label-tag guide-stop-label">06</div>
+                <div class="guide-stop-name font-display">Global</div>
+              </li>
+              <li class="guide-stop"><span class="guide-dot" style="background:var(--mocha)"></span>
+                <div class="label-tag guide-stop-label">07</div>
+                <div class="guide-stop-name font-display">The Premium End</div>
+              </li>
+              <li class="guide-stop" style="padding-right:0"><span class="guide-dot" style="background:var(--terracotta)"></span>
+                <div class="label-tag guide-stop-label">08</div>
+                <div class="guide-stop-name font-display">Closing</div>
+              </li>
+            </ol>
+          </div>
+
+         
+          <div class="stat-strip mt-6" role="list" aria-label="Key statistics">
+            <div class="stat-card" role="listitem">
+              <div class="stat-value font-display">75<span class="stat-unit">%</span></div>
+              <div class="stat-label label-tag">drink coffee weekly</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value font-display">3.6<span class="stat-unit">B</span></div>
+              <div class="stat-label label-tag">cups per year</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value font-display">$5.20</div>
+              <div class="stat-label label-tag">avg flat white</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value font-display">27K</div>
+              <div class="stat-label label-tag">cafes nationally</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value font-display">#41</div>
+              <div class="stat-label label-tag">per capita globally</div>
+            </div>
+          </div>
+
+        </section>
+      </header>
+
+     
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag accent-coral">01</span>
+          <span class="divider-text font-display">Tastes</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+    
+      <section class="section" aria-labelledby="section-taste-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--coral)">01</span>
+            <span class="section-kicker label-tag">Tastes</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-taste-title">What do Australians actually drink?</h2>
+            <p class="section-lede">Australia is often seen as a flat white country, but coffee habits change with age.
+              Older drinkers usually stick with cappuccinos and espresso, while younger drinkers are more likely to
+              choose iced or specialty coffee. The flavour profile sits somewhere between milky comfort and strong
+              coffee taste.</p>
+          </div>
+        </div>
+
+      
+        <div class="taste-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-coral">Figure 02 · Sankey diagram</div>
+              <div class="chart-card-title font-display">Coffee Drink Choices by Age Group</div>
+              <div class="chart-card-caption serif-note">Each band connects an age group to a preferred coffee drink. Thicker bands show more respondents.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart1" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>GACTT Survey 2024</span>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag" style="color:var(--caramel)">Figure 03 · Radar Chart</div>
+              <div class="chart-card-title font-display">National taste profile</div>
+              <div class="chart-card-caption serif-note">Average preference across strength, roast, caffeine and
+                enjoyment dimensions.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart2" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>GACTT Survey 2024</span>
+            </div>
+          </div>
+        </div>
+
+       
+        <div class="grid-four mt-4">
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag accent-coral">A. Flat white</div>
+            <div class="annotation-title font-display">The everyday favourite</div>
+            <div class="annotation-body">A stronger, smoother coffee made with espresso and a thin layer of milk foam.
+              It is smaller than a latte and is one of Australia's most familiar coffee choices.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--caramel)">B. Latte</div>
+            <div class="annotation-title font-display">Soft and milky</div>
+            <div class="annotation-body">A milder coffee with more steamed milk. It suits people who prefer a smoother
+              taste and a larger cup.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--mocha)">C. Cappuccino</div>
+            <div class="annotation-title font-display">The classic choice</div>
+            <div class="annotation-body">A balanced mix of espresso, steamed milk and foam, usually finished with
+              chocolate powder. Especially popular with older coffee drinkers.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag accent-blue">D. Iced coffee</div>
+            <div class="annotation-title font-display">The younger pick</div>
+            <div class="annotation-body">A cold coffee option, from iced lattes to cold brew. Younger drinkers are more
+              likely to choose iced and specialty coffee styles.</div>
+          </div>
+        </div>
+      </section>
+
+      
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag" style="color:var(--sage)">02</span>
+          <span class="divider-text font-display">Benefits</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+     
+      <section class="section" aria-labelledby="section-benefits-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--sage)">02</span>
+            <span class="section-kicker label-tag">Benefits</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-benefits-title">Why does coffee feels like more than a drink to Australians?</h2>
+            <p class="section-lede">Many people start drinking coffee because it helps them feel more awake, but the
+              habit often becomes more than that. For Australians, coffee can be part of a morning routine, a quick
+              social break, or a small reset during the day. Some benefits are supported by research, while others come
+              from personal experience, but both affect how people value their cup of coffee.</p>
+          </div>
+        </div>
+
+       
+        <div class="benefits-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag" style="color:var(--sage)">Figure 04 · Bubble Matrix Chart</div>
+              <div class="chart-card-title font-display">When Coffee Helps and When It Doesn’t</div>
+              <div class="chart-card-caption serif-note">Each bubble shows how health-risk associations change across coffee intake levels. Larger bubbles indicate stronger evidence, while colour separates reduced risk, mixed results and increased risk.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart3" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>NIH PMC meta-analyses 2024</span>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag" style="color:var(--terracotta)">Figure 05 · Alluvial Diagram</div>
+              <div class="chart-card-title font-display">Where Evidence and Perception Split</div>
+              <div class="chart-card-caption serif-note">Each flow links a coffee benefit claim to its evidence level and public perception. Colour shows the size and direction of the gap between scientific support and consumer belief.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart4" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>USDA ORAC Database · NIH 2024</span>
+            </div>
+          </div>
+        </div>
+
+       
+        <div class="grid-three mt-4">
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--sage)">Science says</div>
+            <div class="annotation-title font-display">Alertness is real</div>
+            <div class="annotation-body">Caffeine can make people feel more alert by blocking tiredness signals in the
+              brain. This is why many Australians drink coffee in the morning or during study/work breaks to stay
+              focused.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--caramel)">Culture says</div>
+            <div class="annotation-title font-display">The ritual matters more</div>
+            <div class="annotation-body">71% of Australians say the act of making or ordering coffee is as important as
+              drinking it. Making coffee, ordering it from a café, or drinking it with someone can become a small daily
+              break that helps people reset and connect.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--terracotta)">The gap</div>
+            <div class="annotation-title font-display">Belief vs evidence</div>
+            <div class="annotation-body">People often value coffee for social reasons, such as taking a break or
+              spending time with others. These benefits are harder to prove scientifically, but they still strongly
+              influence why people choose to drink coffee.</div>
+          </div>
+        </div>
+      </section>
+
+     
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag accent-blue">03</span>
+          <span class="divider-text font-display">Trade</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+    
+      <section class="section" aria-labelledby="section-trade-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--blue-ink)">03</span>
+            <span class="section-kicker label-tag">Trade</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-trade-title">Where does Australia's coffee come from?</h2>
+            <p class="section-lede">Australia does not grow much coffee commercially, so most beans travel a long way
+              before reaching local cafés. Many start from coffee-growing countries such as Brazil, Colombia, Ethiopia
+              or Vietnam, then arrive through major Australian ports like Melbourne, Sydney, Brisbane and
+              Fremantle.</p>
+          </div>
+        </div>
+
+      
+        <div class="chart-grid trade-grid">
+          <div class="chart-card chart-card full trade-map-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-blue">Figure 06 · Choropleth Map and Line Graph</div>
+              <div class="chart-card-title font-display">Where does Australia import green coffee from?</div>
+              <div class="chart-card-caption serif-note">The map shows which origin countries supply Australia's coffee (2024).</div>
+            </div>
+            <div class="chart-card-body map-focus-container">
+              <div id="chart12" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ABS International Trade Statistics</span>
+            </div>
+          </div>
+
+          <div class="chart-card trade-donut-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-blue">Figure 07 · Radial Bar Chart</div>
+              <div class="chart-card-title font-display">From Coffee Suppliers to Export Leaders</div>
+              <div class="chart-card-caption serif-note">Each arc represents a top-ranked country, with longer arcs showing higher coffee volume in tonnes.</div>
+            </div>
+            <div class="chart-card-body sankey-container">
+              <div id="chart5" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ABS International Merchandise Trade · ICO 2024</span>
+            </div>
+          </div>
+
+          <div class="chart-card trend-container trade-area-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-blue">Figure 08 · Area Chart</div>
+              <div class="chart-card-title font-display">Australia coffee import value, 2015–2024</div>
+              <div class="chart-card-caption serif-note">Total value of green and roasted coffee imports in million AUD.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart6" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ABS International Trade Statistics</span>
+            </div>
+          </div>
+        </div>
+
+     
+        <div class="grid-three mt-4">
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--mocha)">Brazil leads</div>
+            <div class="annotation-title font-display">32% of all imports</div>
+            <div class="annotation-body">Brazil remains Australia's largest single-origin coffee supplier. Melbourne's
+              port receives the biggest share, driven by proximity to major roasters in the inner west.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag accent-blue">Vietnam rising</div>
+            <div class="annotation-title font-display">Robusta drives volume</div>
+            <div class="annotation-body">Vietnamese Robusta has doubled its share in a decade, driven by the
+              ready-to-drink and instant coffee segments. It rarely reaches your flat white, but it fills your
+              supermarket shelf.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--gold)">Ethiopia: specialty</div>
+            <div class="annotation-title font-display">Small but growing</div>
+            <div class="annotation-body">Ethiopian heirloom varietals command a premium in Australia's specialty
+              segment. Yirgacheffe and Sidama are among the most-stocked single origins in Melbourne cafes.</div>
+          </div>
+        </div>
+      </section>
+
+      
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag accent-gold">04</span>
+          <span class="divider-text font-display">Prices</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+     
+      <section class="section" aria-labelledby="section-prices-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--gold)">04</span>
+            <span class="section-kicker label-tag">What It Costs</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-prices-title">How much does a cup cost?</h2>
+            <p class="section-lede">A standard flat white ranges from $4.21 in Melbourne to $4.86 in Darwin.
+              Less than a dollar separates the cheapest state from the priciest, but that gap compounds
+              quickly when you're buying two cups a day, five days a week.</p>
+          </div>
+        </div>
+
+      
+        <div class="prices-top-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-gold">Figure 09 · Diverging bar chart</div>
+              <div class="chart-card-title font-display">Average flat white price by state</div>
+              <div class="chart-card-caption serif-note">Bars to the right sit above the national average, bars to the left sit below it.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart7" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ABS · Friendly Finance 2024</span>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag accent-gold">Figure 10 · Choropleth Map</div>
+              <div class="chart-card-title font-display">State price ranking</div>
+              <div class="chart-card-caption serif-note">Average cappuccino price in AUD by state and territory.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart8" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>Finder · BeanScene 2024</span>
+            </div>
+          </div>
+        </div>
+
+       
+        <div class="prices-bottom-grid">
+          <!-- Compact coffee price menu -->
+          <div class="price-menu">
+            <div class="price-menu-title font-display">City Coffee Price Guide</div>
+            <div class="price-menu-subtitle serif-note">Average flat white · 2024 survey</div>
+            <div class="price-menu-row">
+              <div class="price-menu-item">
+                <div class="price-menu-dot" style="background:var(--terracotta)"></div>
+                Darwin <span class="price-menu-state">NT</span>
+              </div>
+              <div class="price-menu-price font-display" style="color:var(--terracotta)">$4.86</div>
+            </div>
+            <div class="price-menu-row">
+              <div class="price-menu-item">
+                <div class="price-menu-dot" style="background:var(--gold)"></div>
+                Perth <span class="price-menu-state">WA</span>
+              </div>
+              <div class="price-menu-price font-display" style="color:var(--gold)">$4.63</div>
+            </div>
+            <div class="price-menu-row">
+              <div class="price-menu-item">
+                <div class="price-menu-dot" style="background:var(--caramel)"></div>
+                Brisbane <span class="price-menu-state">QLD</span>
+              </div>
+              <div class="price-menu-price font-display" style="color:var(--caramel)">$4.55</div>
+            </div>
+            <div class="price-menu-row">
+              <div class="price-menu-item">
+                <div class="price-menu-dot" style="background:var(--mocha)"></div>
+                Sydney <span class="price-menu-state">NSW</span>
+              </div>
+              <div class="price-menu-price font-display" style="color:var(--mocha)">$4.50</div>
+            </div>
+            <div class="price-menu-row" style="border-bottom:none;">
+              <div class="price-menu-item">
+                <div class="price-menu-dot" style="background:#5c7a3a"></div>
+                Melbourne <span class="price-menu-state">VIC</span>
+              </div>
+              <div class="price-menu-price font-display" style="color:#5c7a3a">$4.21</div>
+            </div>
+            <div class="price-menu-footer">
+              <span class="source-label label-tag">Source</span>
+              <span style="font-size:12.5px;color:#5a3b25;font-weight:600;">ABS · Finder · BeanScene 2024</span>
+            </div>
+          </div>
+
+        
+          <div class="annotation-card receipt-card">
+            <div class="annotation-tag label-tag accent-gold">Coffee receipt</div>
+            <div class="annotation-title font-display">A weekly coffee bill adds up</div>
+            <div class="annotation-body">The state price gap looks small per cup, but it becomes noticeable across a weekly routine. A two-cup workday habit can shift by almost $10 a week depending on location.</div>
+            <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;padding-top:14px;border-top:1px dashed #c9ab80;">
+              <div>
+                <div class="font-display" style="font-size:22px;color:var(--terracotta)">$4.86</div>
+                <div class="label-tag" style="font-size:9px;margin-top:3px">Darwin</div>
+              </div>
+              <div>
+                <div class="font-display" style="font-size:22px;color:var(--gold)">$4.63</div>
+                <div class="label-tag" style="font-size:9px;margin-top:3px">Perth</div>
+              </div>
+              <div>
+                <div class="font-display" style="font-size:22px;color:var(--sage)">$4.21</div>
+                <div class="label-tag" style="font-size:9px;margin-top:3px">Melbourne</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:12px 14px;background:var(--paper-2);border-radius:8px;border-left:3px solid var(--gold);">
+              <div class="label-tag accent-gold" style="margin-bottom:5px;">Did you know?</div>
+              <div style="font-size:13.5px;color:#4f3b2c;line-height:1.55;">
+                At two coffees per working day, a Darwin office worker pays <strong>~$338 more per year</strong> than a Melburnian for the same habit.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag accent-teal">05</span>
+          <span class="divider-text font-display">Places</span>
+        </div>
+        <svg class="steam-glyph" width="60" height="20" viewBox="0 0 60 20" fill="none" aria-hidden="true">
+          <path d="M4 16 C 10 8, 14 14, 20 6 S 32 12, 38 4 S 54 10, 58 4"
+            stroke="var(--teal)" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </div>
+
+    
+      <section class="section" aria-labelledby="section-places-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--teal)">05</span>
+            <span class="section-kicker label-tag">Café Concentration</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-places-title">Where is café culture concentrated?</h2>
+            <p class="section-lede">Australia’s café culture is not evenly spread. The largest and darkest bubbles cluster around major capital-city regions, especially Melbourne and Sydney, where high population density, office workers, universities and walkable inner suburbs support more cafés per square kilometre. Smaller but visible café hubs also appear around Perth, Adelaide, Brisbane, the Gold Coast and Hobart, showing that café culture follows Australia’s urban and coastal settlement pattern.</p>
+          </div>
+        </div>
+
+       
+        <div class="chart-card chart-card full places-card">
+          <div class="chart-card-header">
+            <div class="chart-card-tag label-tag accent-teal">Figure 11 · Proportional Symbol Map.</div>
+            <div class="chart-card-title font-display">Café concentration across Australia</div>
+            <div class="chart-card-caption serif-note"> Scroll to zoom · Drag to pan · Hover for detail.</div>
+          </div>
+          <div class="chart-card-body">
+            <div id="chart15" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+          </div>
+          <div class="chart-card-footer">
+            <span class="source-label label-tag">Source</span><span>IBISWorld</span>
+          </div>
+        </div>
+
+      
+        <div class="grid-three mt-4" style="width:100%;">
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag accent-teal">Capital-city clusters</div>
+            <div class="annotation-title font-display">Melbourne-Sydney-Brisbane</div>
+            <div class="annotation-body">The strongest café concentrations appear around the south-east coast and major metropolitan areas. These cities combine dense neighbourhoods, commuter traffic and social dining habits, making cafés part of everyday urban life.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag accent-coral">Density vs total cafés</div>
+            <div class="annotation-title font-display">Bigger bubble ≠ always denser culture</div>
+            <div class="annotation-body">Bubble size shows the estimated number of cafés, while darker colour shows cafés per 100 km². This means a large city may have many cafés overall, but the darkest bubbles highlight compact areas where cafés are especially concentrated.</div>
+          </div>
+          <div class="annotation-card">
+            <div class="annotation-tag label-tag" style="color:var(--gold)">Beyond Melbourne</div>
+            <div class="annotation-title font-display">Perth · Adelaide · Hobart · Coastal centres</div>
+            <div class="annotation-body">Café culture is not only a Melbourne story. Perth, Adelaide and Hobart also form clear café hubs, while smaller coastal and regional centres show lighter concentrations. The pattern suggests cafés are strongest where tourism, walkability and local social activity overlap.</div>
+          </div>
+        </div>
+      </section>
+
+     
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag" style="color:var(--mocha)">06</span>
+          <span class="divider-text font-display">Global</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+    
+      <section class="section" aria-labelledby="section-global-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--mocha)">06</span>
+            <span class="section-kicker label-tag">On the World Stage</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-global-title">How does Australia compare globally?</h2>
+            <p class="section-lede">Australia may not top the world in coffee consumed per person, with New Zealand and several Nordic or European countries drinking more by volume. But Australia’s coffee story is not about quantity alone. Its culture stands out through espresso-based drinks, dense café scenes and the social habit of meeting over coffee.</p>
+          </div>
+        </div>
+
+       
+        <div class="chart-grid global-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag" style="color:var(--mocha)">Figure 12 · Bubble Scatter Plot</div>
+              <div class="chart-card-title font-display">Global coffee consumption ranking</div>
+              <div class="chart-card-caption serif-note">kg of coffee consumed per person per year. Australia
+                highlighted.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart9" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ICO 2024 · WorldPopulationReview</span>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-tag label-tag" style="color:var(--mocha)">Figure 13 · Lollipop chart</div>
+              <div class="chart-card-title font-display">Who Drinks the Most Coffee Per Person?</div>
+              <div class="chart-card-caption serif-note">Each line shows annual coffee consumption per person for selected countries.</div>
+            </div>
+            <div class="chart-card-body">
+              <div id="chart10" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+            </div>
+            <div class="chart-card-footer">
+              <span class="source-label label-tag">Source</span><span>ICO Historical Data · Economy Insights 2024</span>
+            </div>
+          </div>
+        </div>
+
+     
+        <div class="annotation-card mt-4">
+          <div class="annotation-tag label-tag" style="color:var(--mocha)">Reading the data</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:8px;">
+            <div>
+              <div class="annotation-title font-display">Nordic and European leaders</div>
+              <div class="annotation-body">Finland is one of the world’s strongest coffee-consuming countries. The Finnish coffee break, known as “kahvitauko”, is a deeply embedded workplace habit, with coffee often consumed black and repeatedly throughout the day.</div>
+            </div>
+            <div>
+              <div class="annotation-title font-display">Australia: café culture, not volume</div>
+              <div class="annotation-body">Low per-capita, but that's partly because Australians drink short, strong
+                espresso-based drinks, less liquid, more intensity. By café density, Australia ranks far higher.</div>
+            </div>
+            <div>
+              <div class="annotation-title font-display">Big markets are not always big drinkers</div>
+              <div class="annotation-body">Bubble size shows total market volume, not personal habit. Large countries can have huge coffee markets because of population size, even if their per-person consumption is lower than smaller coffee-loving countries.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag accent-terracotta">07</span>
+          <span class="divider-text font-display">The Premium End</span>
+        </div>
+        <div class="receipt-dots"></div>
+      </div>
+
+     
+      <section class="section" aria-labelledby="section-premium-title">
+        <div class="section-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--terracotta)">07</span>
+            <span class="section-kicker label-tag">Luxury End</span>
+          </div>
+          <div>
+            <h2 class="section-title" id="section-premium-title">The premium end of coffee.</h2>
+            <p class="section-lede">At the top of the market, a kilogram of coffee can cost more than a return flight
+              to Bangkok. Rarity, process and provenance drive prices, not flavour alone. The world's most expensive
+              beans are rarely what Australians actually order.</p>
+          </div>
+        </div>
+
+      
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-tag label-tag accent-terracotta">Figure 14 · Horizontal Bar Chart</div>
+            <div class="chart-card-title font-display">Top 10 most expensive coffees in the world (AUD/kg)</div>
+            <div class="chart-card-caption serif-note"> Hover bars for origin and flavour notes.</div>
+          </div>
+          <div class="chart-card-body">
+            <div id="chart11" class="vega-chart placeholder-chart"><span>Loading chart…</span></div>
+          </div>
+          <div class="chart-card-footer">
+            <span class="source-label label-tag">Source</span><span>Sprudge · Perfect Daily Grind · Volza Trade 2024</span>
+          </div>
+        </div>
+
+     
+        <div class="premium-grid">
+          <div class="premium-card">
+            <div class="premium-rank font-display">01</div>
+            <div class="premium-name font-display">Black Ivory</div>
+            <div class="premium-origin">Thailand</div>
+            <div class="premium-price font-display">$3,212<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Cocoa · honey · low acidity</div>
+            <div class="premium-badge" style="color:var(--terracotta);border-color:var(--terracotta)">Rare</div>
+          </div>
+          <div class="premium-card">
+            <div class="premium-rank font-display">02</div>
+            <div class="premium-name font-display">Kopi Luwak</div>
+            <div class="premium-origin">Indonesia</div>
+            <div class="premium-price font-display">$1,989<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Earthy · molasses · syrupy</div>
+            <div class="premium-badge" style="color:var(--mocha);border-color:var(--mocha)">Process</div>
+          </div>
+          <div class="premium-card">
+            <div class="premium-rank font-display">03</div>
+            <div class="premium-name font-display">La Esmeralda Geisha</div>
+            <div class="premium-origin">Panama</div>
+            <div class="premium-price font-display">$1,301<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Jasmine · bergamot · peach</div>
+            <div class="premium-badge" style="color:var(--terracotta);border-color:var(--terracotta)">Rare</div>
+          </div>
+          <div class="premium-card">
+            <div class="premium-rank font-display">04</div>
+            <div class="premium-name font-display">Saint Helena</div>
+            <div class="premium-origin">St. Helena</div>
+            <div class="premium-price font-display">$826<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Caramel · citrus · clean</div>
+            <div class="premium-badge" style="color:var(--terracotta);border-color:var(--terracotta)">Rare</div>
+          </div>
+          <div class="premium-card">
+            <div class="premium-rank font-display">05</div>
+            <div class="premium-name font-display">Jamaican Blue Mountain</div>
+            <div class="premium-origin">Jamaica</div>
+            <div class="premium-price font-display">$581<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Floral · mild · nutty</div>
+            <div class="premium-badge" style="color:var(--old-gold);border-color:var(--old-gold)">Experience</div>
+          </div>
+          <div class="premium-card">
+            <div class="premium-rank font-display">06</div>
+            <div class="premium-name font-display">Hawaiian Kona</div>
+            <div class="premium-origin">Hawaii, USA</div>
+            <div class="premium-price font-display">$490<span class="premium-price-unit">/kg</span></div>
+            <div class="premium-flavour serif-note">Brown sugar · macadamia</div>
+            <div class="premium-badge" style="color:var(--old-gold);border-color:var(--old-gold)">Experience</div>
+          </div>
+        </div>
+      </section>
+
+     
+      <div class="section-divider" aria-hidden="true">
+        <div class="receipt-dots"></div>
+        <div class="divider-label">
+          <span class="divider-num label-tag" style="color:var(--ink-soft)">08</span>
+          <span class="divider-text font-display">Closing the Loop</span>
+        </div>
+        <svg class="steam-glyph" width="60" height="20" viewBox="0 0 60 20" fill="none" aria-hidden="true">
+          <path d="M4 16 C 10 8, 14 14, 20 6 S 32 12, 38 4 S 54 10, 58 4"
+            stroke="var(--ink-soft)" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+      </div>
+
+      <!-- ══════════════════════════ SECTION 08 — CONCLUSION ══ -->
+      <section class="section section-conclusion" aria-labelledby="section-conclusion-title">
+        <div class="section-conclusion-header">
+          <div class="section-number-block">
+            <span class="section-number font-display" style="color:var(--terracotta)">08</span>
+            <span class="section-kicker label-tag accent-terracotta">Closing</span>
+          </div>
+          <div>
+            <h2 class="conclusion-title font-display" id="section-conclusion-title">Australia's<br><em>coffee story</em>.</h2>
+          </div>
+        </div>
+        <div class="conclusion-grid">
+          <div>
+            <p class="section-lede" style="margin-top:22px;">Coffee in Australia is a global
+              product served on a local rhythm. Therefore, the cup in your hand carries every section of this story inside
+              it.</p>
+            <div class="watch-card" style="margin-top:22px;">
+              <div class="watch-title font-display">More information</div>
+              <div class="watch-item">
+                <div class="watch-dot"></div>
+                <div>Iced and specialty growing fastest among under-25s. Tasting is shifting.</div>
+              </div>
+              <div class="watch-item">
+                <div class="watch-dot"></div>
+                <div>Import volumes have risen 60% in a decade with no sign of plateauing.</div>
+              </div>
+              <div class="watch-item">
+                <div class="watch-dot"></div>
+                <div>Climate stress in Brazil &amp; Vietnam will likely move premium prices first.</div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;min-width:0;">
+            <div class="recap-card">
+              <div class="recap-num font-display" style="color:var(--coral)">01</div>
+              <div class="recap-title font-display">A daily ritual</div>
+              <div class="recap-body">Coffee is the most-shared morning gesture in the country — eight in ten adults
+                drink it at least once a week.</div>
+            </div>
+            <div class="recap-card">
+              <div class="recap-num font-display" style="color:var(--blue-ink)">02</div>
+              <div class="recap-title font-display">Local cup, global ledger</div>
+              <div class="recap-body">Almost every bean is imported. Australia is a small consumer by per-capita weight,
+                but a heavyweight in café culture and roasting.</div>
+            </div>
+            <div class="recap-card">
+              <div class="recap-num font-display" style="color:var(--teal)">03</div>
+              <div class="recap-title font-display">Place shapes price</div>
+              <div class="recap-body">$0.90 separates the cheapest state from the priciest. Inside Melbourne, ten
+                suburbs hold half the country's specialty roasters.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
+      <footer class="footer">
+        <div class="footer-divider" aria-hidden="true">
+          <div class="receipt-dots"></div>
+          <div class="divider-label">
+            <span style="font-size:15px;">☕</span>
+            <span class="divider-text font-display">End of handout</span>
+          </div>
+          <div class="receipt-dots"></div>
+        </div>
+
+        <div class="footer-card">
+          <div class="footer-top">
+            <div>
+              <h3 class="font-display" style="font-size:26px;letter-spacing:-0.02em;color:var(--ink);"> Acknowledgements</h3>
+            </div>
+            <div style="text-align:right;">
+              <div class="font-display" style="font-size:20px;letter-spacing:-0.01em;color:var(--coral);">Coffee in Australia</div>
+              <div class="label-tag" style="margin-top:4px;">14 Figures including 3 Maps</div>
+            </div>
+          </div>
+
+          <div class="footer-grid">
+            <div>
+              <div class="footer-col-title label-tag">Author</div>
+              <div class="footer-row"><div class="footer-key label-tag">Name</div><div class="footer-val">Truc Linh Phung</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Unit</div><div class="footer-val">FIT2179</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Submission</div><div class="footer-val">Data Visualisation 2</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Date</div><div class="footer-val">31st May 2026</div></div>
+            </div>
+            <div>
+              <div class="footer-col-title label-tag">Data Sources</div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 1</div><div class="footer-val">NIH PMC 2024</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 2</div><div class="footer-val">ICO World Coffee Indicators 2024</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 3</div><div class="footer-val">GACTT 2024</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 4</div><div class="footer-val">IBISWorld</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 5</div><div class="footer-val">ABS 2024</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Source 6</div><div class="footer-val">
+Finder · BeanScene 2024</div></div>
+             <div class="footer-row"><div class="footer-key label-tag">Source 7</div><div class="footer-val">
+Sprudge · Perfect Daily Grind · Volza Trade 2024</div></div>
+            </div>
+            <div>
+              <div class="footer-col-title label-tag">Tools &amp; Process</div>
+              <div class="footer-row"><div class="footer-key label-tag">Front-end</div><div class="footer-val">HTML, CSS, JavaScript</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Typography</div><div class="footer-val">Fraunces · Poppins · Georgia</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Map data</div><div class="footer-val">Natural Earth · Mapshaper</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Code</div><div class="footer-val">github.com/TrucPhungLinh/fit2179new</div></div>
+            </div>
+            <div>
+              <div class="footer-col-title label-tag">Acknowledgements</div>
+              <div class="footer-row"><div class="footer-key label-tag">Layout reference</div><div class="footer-val">Canva</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Inspiration</div><div class="footer-val">Pinterest</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Map base</div><div class="footer-val">Natural Earth, Mapshaper</div></div>
+              <div class="footer-row"><div class="footer-key label-tag">Coding Reference</div><div class="footer-val">Chat GPT 5.5</div></div>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <div class="brand">
+              <div class="brand-mark">☕</div>
+              <div>
+                <div class="footer-brand-name font-display">Monash University</div>
+                <div class="label-tag">FIT2179 Studio 17 Tuesday</div>
+              </div>
+            </div>
+            <div class="footer-links">
+              <span>Truc Linh Phung</span>
+              <span> Student ID: 35645350</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="js/vega_lite_vis.js"></script>
+</body>
+
+</html>

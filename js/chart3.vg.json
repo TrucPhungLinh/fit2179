@@ -1,0 +1,335 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "The Relationship Between Coffee Intake and Health Risk Reduction",
+    "anchor": "start",
+    "font": "Georgia",
+    "fontSize": 24,
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 13,
+    "color": "#2F1B10",
+    "subtitleColor": "#6F5140",
+    "offset": 16
+  },
+  "width": 820,
+  "height": 430,
+  "background": "#FFF7EA",
+  "padding": {
+    "left": 18,
+    "right": 28,
+    "top": 22,
+    "bottom": 18
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_health_risk_matrix.csv"
+  },
+  "params": [
+    {
+      "name": "category_choice",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "name": "Health category: ",
+        "options": [
+          "All",
+          "Metabolic",
+          "Heart",
+          "Longevity",
+          "Liver",
+          "Brain",
+          "Sleep / Mental"
+        ]
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "category_choice == 'All' || datum.category == category_choice"
+    },
+    {
+      "calculate": "datum.risk_change_pct == 0 ? 'ref' : datum.risk_change_pct > 0 ? '+' + datum.risk_change_pct + '%' : datum.risk_change_pct + '%'",
+      "as": "risk_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "stroke": "#5d3f2d",
+        "strokeWidth": 1.15,
+        "opacity": 0.96
+      },
+      "encoding": {
+        "x": {
+          "field": "intake_level",
+          "type": "ordinal",
+          "sort": [
+            "0 cups/day",
+            "1 cup/day",
+            "2\u20133 cups/day",
+            "3\u20134 cups/day",
+            "5+ cups/day"
+          ],
+          "axis": {
+            "title": "Daily coffee intake",
+            "titleFontSize": 14,
+            "labelFontSize": 12,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "titleColor": "#2F1B10",
+            "labelColor": "#4B3527",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "outcome",
+          "type": "ordinal",
+          "sort": [
+            "Sleep & anxiety risk",
+            "Parkinson's disease",
+            "Liver cancer / HCC",
+            "All-cause mortality",
+            "Cardiovascular mortality",
+            "Type 2 diabetes"
+          ],
+          "axis": {
+            "title": null,
+            "labelFontSize": 12,
+            "labelLimit": 170,
+            "labelColor": "#4B3527",
+            "labelPadding": 10,
+            "grid": true,
+            "gridColor": "#DCC7AC",
+            "gridOpacity": 0.82,
+            "domain": false,
+            "ticks": false
+          }
+        },
+        "size": {
+          "field": "evidence_strength",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1,
+              5
+            ],
+            "range": [
+              260,
+              1900
+            ]
+          },
+          "legend": {
+            "title": "Evidence strength",
+            "orient": "right",
+            "titleFontSize": 12,
+            "labelFontSize": 11,
+            "symbolStrokeColor": "#4A2C1A"
+          }
+        },
+        "color": {
+          "field": "direction",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Reference",
+              "Reduced risk",
+              "Mixed / plateau",
+              "Increased risk"
+            ],
+            "range": [
+              "#D8BE97",
+              "#9B6338",
+              "#D89A4A",
+              "#B95F4B"
+            ]
+          },
+          "legend": {
+            "title": "Association direction",
+            "orient": "bottom",
+            "titleFontSize": 12,
+            "labelFontSize": 11,
+            "symbolStrokeColor": "#4A2C1A"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "intake_level",
+            "title": "Coffee intake"
+          },
+          {
+            "field": "outcome",
+            "title": "Health outcome"
+          },
+          {
+            "field": "category",
+            "title": "Category"
+          },
+          {
+            "field": "risk_change_pct",
+            "title": "Risk change vs no coffee (%)",
+            "format": "+.0f"
+          },
+          {
+            "field": "evidence_strength",
+            "title": "Evidence strength /5"
+          },
+          {
+            "field": "mechanism",
+            "title": "Possible mechanism"
+          },
+          {
+            "field": "tooltip_note",
+            "title": "Interpretation"
+          },
+          {
+            "field": "source",
+            "title": "Evidence source"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "Arial",
+        "fontSize": 11.5,
+        "fontWeight": "bold",
+        "baseline": "middle",
+        "align": "center"
+      },
+      "encoding": {
+        "x": {
+          "field": "intake_level",
+          "type": "ordinal",
+          "sort": [
+            "0 cups/day",
+            "1 cup/day",
+            "2\u20133 cups/day",
+            "3\u20134 cups/day",
+            "5+ cups/day"
+          ]
+        },
+        "y": {
+          "field": "outcome",
+          "type": "ordinal",
+          "sort": [
+            "Sleep & anxiety risk",
+            "Parkinson's disease",
+            "Liver cancer / HCC",
+            "All-cause mortality",
+            "Cardiovascular mortality",
+            "Type 2 diabetes"
+          ]
+        },
+        "text": {
+          "field": "risk_label"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.evidence_strength >= 2",
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "intake_level",
+            "title": "Coffee intake"
+          },
+          {
+            "field": "outcome",
+            "title": "Health outcome"
+          },
+          {
+            "field": "risk_change_pct",
+            "title": "Risk change vs no coffee (%)",
+            "format": "+.0f"
+          },
+          {
+            "field": "tooltip_note",
+            "title": "Interpretation"
+          }
+        ],
+        "color": {
+          "condition": [
+            {
+              "test": "datum.direction == 'Reference' || datum.direction == 'Mixed / plateau'",
+              "value": "#2F1B10"
+            }
+          ],
+          "value": "#EDE8D0"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "intake_level": "2\u20133 cups/day",
+            "outcome": "Sleep & anxiety risk",
+            "label": "Moderate intake\n'sweet spot'"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Georgia",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "#2F1B10",
+        "dy": -30
+      },
+      "encoding": {
+        "x": {
+          "field": "intake_level",
+          "type": "ordinal",
+          "sort": [
+            "0 cups/day",
+            "1 cup/day",
+            "2\u20133 cups/day",
+            "3\u20134 cups/day",
+            "5+ cups/day"
+          ]
+        },
+        "y": {
+          "field": "outcome",
+          "type": "ordinal",
+          "sort": [
+            "Sleep & anxiety risk",
+            "Parkinson's disease",
+            "Liver cancer / HCC",
+            "All-cause mortality",
+            "Cardiovascular mortality",
+            "Type 2 diabetes"
+          ]
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial",
+      "domainColor": "#BFA68A",
+      "tickColor": "#BFA68A",
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    },
+    "legend": {
+      "labelFont": "Arial",
+      "titleFont": "Arial",
+      "labelColor": "#4B3527",
+      "titleColor": "#2F1B10",
+      "labelFontSize": 13,
+      "titleFontSize": 14
+    }
+  }
+}

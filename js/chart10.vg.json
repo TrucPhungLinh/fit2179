@@ -1,0 +1,247 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#FDFAF3",
+  "width": 650,
+  "height": 460,
+  "padding": {
+    "left": 135,
+    "right": 80,
+    "top": 40,
+    "bottom": 45
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/main/coffee_per_capita_slope.csv"
+  },
+  "title": {
+    "text": "Coffee Consumed per Person per Year",
+    "anchor": "start",
+    "font": "Georgia",
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "color": "#3E2B1E",
+    "subtitleFont": "Arial",
+    "subtitleFontSize": 12,
+    "subtitleColor": "#9A7657",
+    "offset": 12
+  },
+  "transform": [
+    {
+      "calculate": "format(datum.kg_per_person, '.1f') + ' kg'",
+      "as": "kg_label"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "sort": {
+        "field": "kg_per_person",
+        "order": "descending"
+      },
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": 3,
+        "cornerRadius": 10
+      },
+      "encoding": {
+        "x": {
+          "field": "kg_per_person",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12.5
+            ]
+          },
+          "axis": null
+        },
+        "x2": {
+          "datum": 0,
+          "type": "quantitative"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country == 'Australia'",
+            "value": "#E97451"
+          },
+          "value": "#C8A160"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "kg_per_person",
+            "type": "quantitative",
+            "title": "kg/person/year",
+            "format": ".1f"
+          },
+          {
+            "field": "rank",
+            "type": "quantitative",
+            "title": "Rank"
+          },
+          {
+            "field": "group",
+            "type": "nominal",
+            "title": "Group"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100,
+        "stroke": "#F6EEDF",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12.5
+            ]
+          },
+          "axis": null
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country == 'Australia'",
+            "value": "#E97451"
+          },
+          "value": "#C8A160"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100,
+        "stroke": "#F6EEDF",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "kg_per_person",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12.5
+            ]
+          },
+          "axis": null
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country == 'Australia'",
+            "value": "#E97451"
+          },
+          "value": "#B48B55"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -16,
+        "font": "Georgia",
+        "fontSize": 16,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12.5
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "country",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country == 'Australia'",
+            "value": "#E97451"
+          },
+          "value": "#6A4A2F"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 14,
+        "font": "Arial",
+        "fontSize": 14,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "field": "kg_per_person",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12.5
+            ]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "kg_label",
+          "type": "nominal"
+        },
+        "color": {
+          "value": "#7A5B43"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Arial",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "grid": false,
+      "domain": false,
+      "ticks": false,
+      "labels": false,
+      "title": null,
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    },
+    "legend": {
+      "labelFontSize": 13,
+      "titleFontSize": 14,
+      "labelColor": "#3f2b1d",
+      "titleColor": "#2a1d14"
+    }
+  }
+}

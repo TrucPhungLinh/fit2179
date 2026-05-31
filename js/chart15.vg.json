@@ -1,0 +1,573 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Cafe concentration across Australia. Bubble size shows estimated cafe count; bubble colour shows cafes per 100 km\u00b2.",
+  "width": 820,
+  "height": 580,
+  "padding": {
+    "left": 10,
+    "right": 200,
+    "top": 10,
+    "bottom": 10
+  },
+  "background": "#FBF5E8",
+  "autosize": "none",
+  "title": {
+    "text": "Where Is Caf\u00e9 Concentration Highest in Australia?",
+    "subtitle": [
+      "Bubble size = estimated caf\u00e9 count \u00b7 Bubble colour = caf\u00e9s per 100 km\u00b2.",
+      "Hover any bubble for detail \u00b7 Scroll to zoom \u00b7 Drag to pan"
+    ],
+    "anchor": "start",
+    "font": "Georgia",
+    "fontSize": 20,
+    "fontWeight": "bold",
+    "color": "#2A1D14",
+    "subtitleFont": "Georgia",
+    "subtitleFontStyle": "italic",
+    "subtitleFontSize": 11.5,
+    "subtitleColor": "#7A5132",
+    "offset": 14
+  },
+  "signals": [
+    {
+      "name": "dragging",
+      "value": false,
+      "on": [
+        {
+          "events": "mousedown",
+          "update": "true"
+        },
+        {
+          "events": "window:mouseup",
+          "update": "false"
+        }
+      ]
+    },
+    {
+      "name": "tx",
+      "value": 0,
+      "on": [
+        {
+          "events": "[mousedown, window:mouseup] > window:mousemove",
+          "update": "dragging ? tx + event.movementX : tx"
+        }
+      ]
+    },
+    {
+      "name": "ty",
+      "value": 0,
+      "on": [
+        {
+          "events": "[mousedown, window:mouseup] > window:mousemove",
+          "update": "dragging ? ty + event.movementY : ty"
+        }
+      ]
+    },
+    {
+      "name": "zoom",
+      "value": 1,
+      "on": [
+        {
+          "events": "wheel!",
+          "update": "clamp(zoom * pow(1.0012, -event.deltaY), 0.55, 8)"
+        }
+      ]
+    },
+    {
+      "name": "proj_scale",
+      "update": "720 * zoom"
+    },
+    {
+      "name": "proj_tx",
+      "update": "410 + tx"
+    },
+    {
+      "name": "proj_ty",
+      "update": "335 + ty"
+    }
+  ],
+  "data": [
+    {
+      "name": "aus_states",
+      "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+      "format": {
+        "type": "json",
+        "property": "features"
+      }
+    },
+    {
+      "name": "state_centroids",
+      "source": "aus_states",
+      "transform": [
+        {
+          "type": "formula",
+          "as": "centroid",
+          "expr": "geoCentroid('proj', datum)"
+        },
+        {
+          "type": "formula",
+          "as": "state_abbr",
+          "expr": "indexof(['New South Wales','Victoria','Queensland','Western Australia','South Australia','Tasmania','Northern Territory','Australian Capital Territory'], datum.properties.STATE_NAME) >= 0 ? ['NSW','VIC','QLD','WA','SA','TAS','NT','ACT'][indexof(['New South Wales','Victoria','Queensland','Western Australia','South Australia','Tasmania','Northern Territory','Australian Capital Territory'], datum.properties.STATE_NAME)] : ''"
+        }
+      ]
+    },
+    {
+      "name": "cafes",
+      "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/aus_cafe_density_per_100km2.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "latitude": "number",
+          "longitude": "number",
+          "cafes_per_100km2": "number",
+          "cafe_count_proxy": "number",
+          "analysis_area_km2": "number",
+          "label_dx": "number",
+          "label_dy": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "proj",
+          "fields": [
+            "longitude",
+            "latitude"
+          ],
+          "as": [
+            "px",
+            "py"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "label_show_bool",
+          "expr": "datum.label_show == 'true' || datum.label_show == true || datum.label_show == 'True'"
+        },
+        {
+          "type": "window",
+          "sort": {
+            "field": "cafes_per_100km2",
+            "order": "descending"
+          },
+          "ops": [
+            "rank"
+          ],
+          "as": [
+            "density_rank"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "labels",
+      "source": "cafes",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.label_show_bool && datum.density_rank <= 7"
+        }
+      ]
+    },
+    {
+      "name": "annotation",
+      "values": [
+        {
+          "text": "How to read: larger bubbles = more caf\u00e9s. Darker caramel colour = higher caf\u00e9 density per 100 km\u00b2."
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "proj",
+      "type": "conicEqualArea",
+      "rotate": [
+        -134,
+        0
+      ],
+      "center": [
+        0,
+        -28
+      ],
+      "parallels": [
+        -18,
+        -36
+      ],
+      "scale": {
+        "signal": "proj_scale"
+      },
+      "translate": [
+        {
+          "signal": "proj_tx"
+        },
+        {
+          "signal": "proj_ty"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "sizeScale",
+      "type": "sqrt",
+      "domain": {
+        "data": "cafes",
+        "field": "cafe_count_proxy"
+      },
+      "range": [
+        25,
+        850
+      ],
+      "clamp": true
+    },
+    {
+      "name": "colorScale",
+      "type": "linear",
+      "domain": [
+        15,
+        30,
+        60,
+        100,
+        150
+      ],
+      "range": [
+        "#F6E6BF",
+        "#E8C57A",
+        "#D79D4A",
+        "#C07631",
+        "#A85B24"
+      ],
+      "clamp": true
+    }
+  ],
+  "marks": [
+    {
+      "type": "shape",
+      "from": {
+        "data": "aus_states"
+      },
+      "encode": {
+        "enter": {
+          "fill": {
+            "value": "#F0E6D6"
+          },
+          "stroke": {
+            "value": "#C8B49F"
+          },
+          "strokeWidth": {
+            "value": 0.8
+          },
+          "cursor": {
+            "value": "grab"
+          }
+        }
+      },
+      "transform": [
+        {
+          "type": "geoshape",
+          "projection": "proj"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "state_centroids"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.centroid[0]"
+          },
+          "y": {
+            "signal": "datum.centroid[1]"
+          },
+          "text": {
+            "field": "state_abbr"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "signal": "clamp(10 * zoom, 7, 13)"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#8B6347"
+          },
+          "fillOpacity": {
+            "value": 0.35
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {
+        "data": "cafes"
+      },
+      "encode": {
+        "enter": {
+          "shape": {
+            "value": "circle"
+          },
+          "fillOpacity": {
+            "value": 0.78
+          },
+          "strokeOpacity": {
+            "value": 0.75
+          },
+          "strokeWidth": {
+            "value": 0.8
+          },
+          "cursor": {
+            "value": "pointer"
+          },
+          "tooltip": {
+            "signal": "{'Place': datum.place + ' (' + datum.state + ')', 'Estimated caf\u00e9 count': datum.cafe_count_proxy, 'Analysis area km\u00b2': datum.analysis_area_km2, 'Caf\u00e9s per 100 km\u00b2': datum.cafes_per_100km2, 'Notes': datum.notes}"
+          }
+        },
+        "update": {
+          "x": {
+            "field": "px"
+          },
+          "y": {
+            "field": "py"
+          },
+          "size": {
+            "scale": "sizeScale",
+            "field": "cafe_count_proxy"
+          },
+          "fill": {
+            "scale": "colorScale",
+            "field": "cafes_per_100km2"
+          },
+          "stroke": {
+            "scale": "colorScale",
+            "field": "cafes_per_100km2"
+          }
+        },
+        "hover": {
+          "fillOpacity": {
+            "value": 1
+          },
+          "strokeWidth": {
+            "value": 2.2
+          },
+          "stroke": {
+            "value": "#2A1D14"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "labels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.px + datum.label_dx * zoom"
+          },
+          "y": {
+            "signal": "datum.py + datum.label_dy * zoom"
+          },
+          "text": {
+            "field": "place"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "signal": "clamp(11 * zoom, 9, 14)"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "value": "#2A1D14"
+          },
+          "fillOpacity": {
+            "signal": "clamp(zoom * 0.85, 0.45, 1)"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "labels"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.px + datum.label_dx * zoom"
+          },
+          "y": {
+            "signal": "datum.py + datum.label_dy * zoom + 13"
+          },
+          "text": {
+            "signal": "'Density: ' + datum.cafes_per_100km2 + ' /100 km\u00b2'"
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontStyle": {
+            "value": "italic"
+          },
+          "fontSize": {
+            "signal": "clamp(9 * zoom, 7.5, 11)"
+          },
+          "fill": {
+            "value": "#7A5132"
+          },
+          "fillOpacity": {
+            "signal": "clamp(zoom * 0.7, 0.3, 0.9)"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "annotation"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 16
+          },
+          "y": {
+            "value": 522
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontSize": {
+            "value": 11
+          },
+          "fontStyle": {
+            "value": "italic"
+          },
+          "fill": {
+            "value": "#6F4A2C"
+          },
+          "align": {
+            "value": "left"
+          },
+          "baseline": {
+            "value": "bottom"
+          }
+        },
+        "update": {
+          "text": {
+            "field": "text"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "value": 16
+          },
+          "y": {
+            "value": 548
+          },
+          "text": {
+            "value": "Source note: Caf\u00e9 density is calculated as caf\u00e9 count proxy divided by analysis area km\u00b2, then multiplied by 100."
+          },
+          "font": {
+            "value": "Georgia"
+          },
+          "fontStyle": {
+            "value": "italic"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fill": {
+            "value": "#000000"
+          }
+        }
+      }
+    }
+  ],
+  "legends": [
+    {
+      "fill": "colorScale",
+      "title": "Caf\u00e9s per 100 km\u00b2",
+      "titleFont": "Georgia",
+      "titleFontSize": 13,
+      "titleColor": "#2a1d14",
+      "labelFont": "Georgia",
+      "labelFontSize": 12,
+      "labelColor": "#5a3b25",
+      "orient": "right",
+      "direction": "vertical",
+      "values": [
+        15,
+        30,
+        60,
+        100,
+        150
+      ],
+      "format": "d",
+      "offset": 16,
+      "padding": 10,
+      "fillColor": "#FBF5E8",
+      "strokeColor": "#DDCBB4",
+      "cornerRadius": 6
+    },
+    {
+      "size": "sizeScale",
+      "title": "Estimated caf\u00e9 count",
+      "titleFont": "Georgia",
+      "titleFontSize": 13,
+      "titleColor": "#2a1d14",
+      "labelFont": "Georgia",
+      "labelFontSize": 12,
+      "labelColor": "#5a3b25",
+      "orient": "right",
+      "direction": "vertical",
+      "values": [
+        50,
+        150,
+        300,
+        500
+      ],
+      "format": "d",
+      "symbolStrokeColor": "#8B5A2B",
+      "symbolFillColor": "#D69B55",
+      "offset": 16,
+      "padding": 10,
+      "fillColor": "#FBF5E8",
+      "strokeColor": "#DDCBB4",
+      "cornerRadius": 6
+    }
+  ]
+}

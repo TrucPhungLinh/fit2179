@@ -1,0 +1,269 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "#FBF5E8",
+  "width": 740,
+  "height": 380,
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Poppins",
+    "axis": {
+      "labelFont": "Poppins",
+      "titleFont": "Poppins",
+      "labelColor": "#3F2B1D",
+      "titleColor": "#2A1A10",
+      "gridColor": "#D8C8B5",
+      "domainColor": "#B99A74",
+      "tickColor": "#B99A74",
+      "labelFontSize": 14,
+      "titleFontSize": 15,
+      "labelFontWeight": "normal",
+      "titleFontWeight": "bold",
+      "grid": false
+    },
+    "legend": {
+      "labelFont": "Poppins",
+      "titleFont": "Poppins",
+      "labelColor": "#2A1A10",
+      "titleColor": "#2A1A10",
+      "labelFontSize": 14,
+      "titleFontSize": 15,
+      "symbolSize": 160,
+      "rowPadding": 6
+    }
+  },
+  "title": {
+    "text": "Coffee imports to Australia over time, by origin (kilotonnes)",
+    "fontSize": 22,
+    "subtitleFontSize": 15,
+    "color": "#24150D",
+    "subtitleColor": "#5A3B25",
+    "subtitleFont": "Poppins",
+    "subtitleFontStyle": "normal",
+    "offset": 14,
+    "font": "Poppins",
+    "fontWeight": "bold"
+  },
+  "params": [
+    {
+      "name": "year_highlight",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 2015,
+        "max": 2024,
+        "step": 1,
+        "name": "Year: "
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/TrucPhungLinh/fit2179new/refs/heads/main/coffee_imports_trend.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "kilotonnes": "number"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "opacity": 0.88
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "labelAngle": 0,
+            "values": [
+              2015,
+              2017,
+              2019,
+              2021,
+              2023,
+              2024
+            ],
+            "grid": false,
+            "ticks": false,
+            "domain": false,
+            "labelFont": "Poppins",
+            "labelFontSize": 14,
+            "labelFontWeight": "normal",
+            "labelColor": "#3F2B1D"
+          }
+        },
+        "y": {
+          "field": "kilotonnes",
+          "type": "quantitative",
+          "title": null,
+          "stack": "zero",
+          "axis": {
+            "tickCount": 4,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelExpr": "datum.value + ' kt'",
+            "labelFont": "Poppins",
+            "labelFontSize": 14,
+            "labelFontWeight": "normal",
+            "labelColor": "#3F2B1D",
+            "gridColor": "#D8C8B5",
+            "gridOpacity": 0.85
+          }
+        },
+        "color": {
+          "field": "country",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Brazil",
+            "Vietnam",
+            "Colombia",
+            "Ethiopia",
+            "Indonesia"
+          ],
+          "scale": {
+            "domain": [
+              "Brazil",
+              "Vietnam",
+              "Colombia",
+              "Ethiopia",
+              "Indonesia"
+            ],
+            "range": [
+              "#7B5230",
+              "#4A6B8A",
+              "#C87858",
+              "#C8A840",
+              "#88A878"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "columns": 5,
+            "symbolType": "square",
+            "symbolSize": 160,
+            "labelFont": "Poppins",
+            "labelFontSize": 14,
+            "labelColor": "#2A1A10",
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Origin"
+          },
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "kilotonnes",
+            "type": "quantitative",
+            "title": "Volume (kt)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === year_highlight"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "strokeWidth": 2,
+        "color": "#5E3325",
+        "opacity": 0.78
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === year_highlight"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "kilotonnes",
+              "as": "total"
+            }
+          ],
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -8,
+        "fontSize": 14,
+        "fontStyle": "normal",
+        "color": "#4A2C1A",
+        "font": "Poppins",
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "total",
+          "type": "quantitative",
+          "stack": "zero"
+        },
+        "text": {
+          "field": "total",
+          "format": ".0f",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "x": 95,
+        "y": 38,
+        "align": "left",
+        "fontSize": 15,
+        "fontStyle": "normal",
+        "font": "Poppins",
+        "color": "#3F2B1D",
+        "text": "+66% over a decade \u2192",
+        "fontWeight": "bold"
+      }
+    }
+  ]
+}
